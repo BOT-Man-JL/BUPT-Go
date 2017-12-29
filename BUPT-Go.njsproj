@@ -37,9 +37,10 @@
     <Content Include="package.json" />
     <Content Include="public\stylesheets\main.css" />
     <Content Include="README.md" />
-    <Content Include="views\index.pug" />
-    <Content Include="views\layout.pug" />
-    <Content Include="views\error.pug" />
+    <Content Include="views\index.ejs" />
+    <Content Include="views\layout-header.ejs" />
+    <Content Include="views\layout-footer.ejs" />
+    <Content Include="views\error.ejs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="public\" />
