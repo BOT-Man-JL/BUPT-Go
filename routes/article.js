@@ -2,6 +2,23 @@
 const express = require('express');
 const router = express.Router();
 
+// Article Definition:
+// - common
+//   - id
+//   - type
+//   - title
+//   - author
+//   - timestamp
+// - guide
+//   - TEXT/PICS
+//   - (in article) link to place
+// - place
+//   - category & area & date-range => search
+//   - location / dial / cost => display only
+//   - TEXT/PICS
+//   - (below article) link to guide
+// - pic
+
 router.get('/', function (req, res) {
     // Note
     // - view current article from id
@@ -28,24 +45,6 @@ router.get('/edit', function (req, res) {
 });
 
 router.post('/submit', function (req, res) {
-    // Note
-    // - type
-    //   - place
-    //   - guide
-    // - guide
-    //   - author
-    //   - timestamp
-    //   - TEXT/PICS
-    //   - (in article) link to place
-    // - place
-    //   - author
-    //   - timestamp
-    //   - location & area
-    //   - cost
-    //   - time
-    //   - dial
-    //   - TEXT/PICS
-    //   - (below article) link to guide
     res.send('respond with a resource');
 });
 
