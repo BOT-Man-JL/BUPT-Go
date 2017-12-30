@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Test Post</title>
+</head>
+<body>
+    <div>
+        <span>ID: </span>
+        <input type="text" name="" value=""
+               oninput="document.getElementById('view-item').setAttribute('href', '/article/?id=' + this.value);" />
+        <br />
+        <a id="view-item" href="/article/">View Item</a>
+    </div>
+    <hr />
+    <div>
+        <a href="/article/all">View All</a>
+    </div>
+    <hr />
+    <div>
+        <form action="/article/submit" method="post">
+            <span>ID: </span>
+            <input type="text" name="id" value="" />
+            <span>(empty for creation)</span>
+            <br />
+            <span>title: </span>
+            <input type="text" name="title" value="" />
+            <br />
+            <span>author: </span>
+            <input type="text" name="author" value="" />
+            <br />
+            <input type="hidden" name="type" value="guide" />
+            <input type="submit" name="" value="Submit Guide" />
+        </form>
+    </div>
+    <hr />
+    <div>
+        <form action="/article/submit" method="post">
+            <span>ID: </span>
+            <input type="text" name="id" value="" />
+            <span>(empty for creation)</span>
+            <br />
+            <span>title: </span>
+            <input type="text" name="title" value="" />
+            <br />
+            <span>author: </span>
+            <input type="text" name="author" value="" />
+            <br />
+            <input type="hidden" name="type" value="place" />
+            <input type="submit" name="" value="Submit Place" />
+        </form>
+    </div>
+    <hr />
+    <div>
+        <form action="/article/delete" method="post">
+            <span>ID: </span>
+            <input type="text" name="id" value="" />
+            <br />
+            <input type="submit" name="" value="Delete" />
+        </form>
+    </div>
+</body>
+</html>
