@@ -144,10 +144,9 @@ router.post('/clear', function (req, res) {
     })
 });
 
-router.post('/upload-pics', function (req, res) {
-    // Note
-    // - https://gist.github.com/aheckmann/2408370
-    res.send('respond with a resource');
+router.post('/upload-image', function (req, res) {
+    res.send(req.files);
+    console.log('upload', req.files);
 });
 
 module.exports = router;
