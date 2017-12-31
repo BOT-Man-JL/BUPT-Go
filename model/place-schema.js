@@ -10,7 +10,7 @@ const PlaceSchema = new Schema({
     dateBeg: Date,
     dateEnd: Date,
     location: String,
-    dial: String,
+    contact: String,
     cost: Number
 });
 

@@ -3,7 +3,9 @@ const express = require('express');
 const router = express.Router();
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/mydb').catch(function (err) {
+const mongoUrl = 'mongodb://localhost:27017/mydb';
+mongoose.connect(mongoUrl).catch(function (err) {
+    console.error(err);
     throw err;
 });
 
@@ -78,32 +80,48 @@ router.get('/search', function (req, res) {
 // Post API
 
 router.post('/submit', function (req, res) {
-    const type = req.body.type;
+    const args = req.body;
+    const type = args.type;
     if (type != 'guide' && type != 'place') {
         return res.send({ err: 'bad type' });
     }
 
-    const newArticle = {
+    const article = {
         type: type,
-        title: req.body.title || 'NEW TITLE',
-        author: req.body.author || 'Anonymous',
-        timestamp: new Date()
+        title: args.title || 'TITLE',
+        author: args.author || 'anonymous',
+        timestamp: new Date(),
+        text: 'Empty Article',
+        reference: []
     };
 
-    const id = req.body.id || null;
+    if (type == 'place') {
+        article.placeInfo = {
+            categroy: args.category || 'fun',
+            area: args.area || 'haidian',
+            dateBeg: args.dateBeg || new Date(),
+            dateEnd: args.dateEnd || new Date(),
+            location: args.location || 'in BUPT Campus',
+            contact: args.contact || '010-12345',
+            cost: args.cost || 100
+        };
+    }
+
+    const id = args.id || null;
     if (id) {
-        Article.findByIdAndUpdate(id, { $set: newArticle }).then(function (docs) {
+        const setter = { $set: article };
+        Article.findByIdAndUpdate(id, setter).then(function (docs) {
             res.send(docs);
-            console.log('update', id, 'to', newArticle);
+            console.log('update', id, 'to', article);
         }).catch(function (err) {
             res.send({ err: err });
             throw err;
         });
     }
     else {
-        Article.create(newArticle).then(function (docs) {
+        Article.create(article).then(function (docs) {
             res.send(docs);
-            console.log('create', newArticle);
+            console.log('create', article);
         }).catch(function (err) {
             res.send({ err: err });
             throw err;

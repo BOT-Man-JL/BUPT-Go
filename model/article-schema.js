@@ -11,7 +11,8 @@ const ArticleSchema = new Schema({
     author: String,
     timestamp: Date,
     placeInfo: PlaceSchema,
-    text: String
+    text: String,
+    reference: [ ObjectId ]
 });
 
 module.exports = ArticleSchema;
