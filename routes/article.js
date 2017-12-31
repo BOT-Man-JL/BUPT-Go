@@ -2,16 +2,10 @@
 const express = require('express');
 const router = express.Router();
 
-const mongoose = require('mongoose');
-const mongoUrl = 'mongodb://localhost:27017/mydb';
-mongoose.connect(mongoUrl).catch(function (err) {
-    console.error(err);
-    throw err;
-});
-
 const ArticleSchema = require('../model/article-schema');
 const PlaceSchema = require('../model/place-schema');
 
+const mongoose = require('mongoose');
 const Article = mongoose.model('article', ArticleSchema);
 const Place = mongoose.model('place', PlaceSchema);
 

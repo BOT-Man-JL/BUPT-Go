@@ -5,6 +5,7 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const app = express();
 
@@ -57,6 +58,10 @@ app.use(function (err, req, res, next) {
 
 app.set('port', process.env.PORT || 8080);
 
-const server = app.listen(app.get('port'), function () {
-    console.log('Express server listening on port ' + server.address().port);
+const mongoUrl = 'mongodb://localhost:27017/mydb';
+mongoose.connect(mongoUrl).then(function () {
+    console.log('Connected to ' + mongoUrl);
+    const server = app.listen(app.get('port'), function () {
+        console.log('Listening on port ' + server.address().port);
+    });
 });
