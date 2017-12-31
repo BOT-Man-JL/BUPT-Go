@@ -1,88 +1,86 @@
 ﻿'use strict';
-const path = require('path');
 const express = require('express');
 const router = express.Router();
 
-const mongoClient = require('mongodb').MongoClient;
-const getObjectId = require('mongodb').ObjectID;
-const mongoUrl = 'mongodb://localhost:27017/';
-const dbName = 'mydb';
-const collectionName = 'article';
-
-mongoClient.connect(mongoUrl, function (err, client) {
-    if (err) throw err;
-    const db = client.db(dbName);
-
-    db.createCollection(collectionName, function (err, ret) {
-        if (err) throw err;
-        console.log('Collection created!');
-        client.close();
-    });
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/mydb').catch(function (err) {
+    throw err;
 });
 
-// Article Definition:
-// - common
-//   - _id
-//   - type
-//   - title
-//   - author
-//   - timestamp
-// - guide
-//   - TEXT/PICS
-//   - (in article) link to place
-// - place
-//   - category & area & date-range => search
-//   - location / dial / cost => display only
-//   - TEXT/PICS
-//   - (below article) link to guide
-// - pic
+const ArticleSchema = require('../model/article-schema');
+const PlaceSchema = require('../model/place-schema');
+
+const Article = mongoose.model('article', ArticleSchema);
+const Place = mongoose.model('place', PlaceSchema);
+
+// Page
 
 router.get('/create', function (req, res) {
-    res.sendFile(path.join(__dirname, '../public/test-post.html'));
+    res.send('Create Page');
+    console.log('create');
 });
 
 router.get('/edit', function (req, res) {
-    res.sendFile(path.join(__dirname, '../public/test-post.html'));
+    const id = req.query.id || null;
+    Article.findById(id).then(function (docs) {
+        res.send('Edit Page for item ' + docs);
+        console.log('edit', id);
+    }).catch(function (err) {
+        res.send({ err: err });
+        throw err;
+    });
 });
+
+// Get API
 
 router.get('/', function (req, res) {
-    mongoClient.connect(mongoUrl, function (err, client) {
-        if (err) throw err;
-        const db = client.db(dbName);
-
-        const id = req.query.id || 0;
-        const query = { _id: getObjectId(id) };
-        db.collection(collectionName).find(query).toArray(function (err, ret) {
-            if (err) throw err;
-            res.send(ret);
-            console.log('query', id);
-            client.close();
-        });
+    const id = req.query.id || null;
+    Article.findById(id).then(function (docs) {
+        res.send(docs);
+        console.log('query', id);
+    }).catch(function (err) {
+        res.send({ err: err });
+        throw err;
     });
 });
 
-router.get('/all', function (req, res) {
-    mongoClient.connect(mongoUrl, function (err, client) {
-        if (err) throw err;
-        const db = client.db(dbName);
-
-        db.collection(collectionName).find().toArray(function (err, ret) {
-            if (err) throw err;
-            res.send(ret);
-            console.log('query all');
-            client.close();
-        });
+router.get('/hot', function (req, res) {
+    const hotCount = 3;
+    Article.find().limit(hotCount).then(function (docs) {
+        res.send(docs);
+        console.log('query all');
+    }).catch(function (err) {
+        res.send({ err: err });
+        throw err;
     });
 });
+
+router.get('/search', function (req, res) {
+    const query = {};
+    if (req.query.category)
+        query.category = req.query.category;
+    if (req.query.area)
+        query.area = req.query.area;
+    if (req.query.date) {
+        query.dateBeg = { $lt: req.query.date };
+        query.dateEnd = { $gt: req.query.date };
+    }
+
+    Article.find(query).then(function (docs) {
+        res.send(docs);
+        console.log('search');
+    }).catch(function (err) {
+        res.send({ err: err });
+        throw err;
+    });
+});
+
+// Post API
 
 router.post('/submit', function (req, res) {
     const type = req.body.type;
     if (type != 'guide' && type != 'place') {
-        res.send({
-            ok: 0,
-            err: 'bad type'
-        });
-        return;
+        return res.send({ err: 'bad type' });
     }
 
     const newArticle = {
@@ -92,52 +90,41 @@ router.post('/submit', function (req, res) {
         timestamp: new Date()
     };
 
-    mongoClient.connect(mongoUrl, function (err, client) {
-        if (err) throw err;
-        const db = client.db(dbName);
-
-        const id = req.body.id || null;
-        if (id) {
-            const query = { _id: getObjectId(id) };
-            const article = { $set: newArticle };
-            db.collection(collectionName).updateOne(query, article, function (err, ret) {
-                if (err) throw err;
-                res.send(ret);
-                console.log('update', id, 'to', newArticle);
-                client.close();
-            });
-        }
-        else {
-            db.collection(collectionName).insertOne(newArticle, function (err, ret) {
-                if (err) throw err;
-                res.send(ret);
-                console.log('create', newArticle);
-                client.close();
-            });
-        }
-    });
+    const id = req.body.id || null;
+    if (id) {
+        Article.findByIdAndUpdate(id, { $set: newArticle }).then(function (docs) {
+            res.send(docs);
+            console.log('update', id, 'to', newArticle);
+        }).catch(function (err) {
+            res.send({ err: err });
+            throw err;
+        });
+    }
+    else {
+        Article.create(newArticle).then(function (docs) {
+            res.send(docs);
+            console.log('create', newArticle);
+        }).catch(function (err) {
+            res.send({ err: err });
+            throw err;
+        });
+    }
 });
 
 router.post('/delete', function (req, res) {
-    mongoClient.connect(mongoUrl, function (err, client) {
-        if (err) throw err;
-        const db = client.db(dbName);
-
-        const id = req.body.id || 0;
-        const query = { _id: getObjectId(id) };
-        db.collection(collectionName).deleteOne(query, function (err, ret) {
-            if (err) throw err;
-            res.send(ret);
-            console.log('delete', id);
-            client.close();
-        });
+    const id = req.body.id || null;
+    Article.findByIdAndRemove(id).then(function (docs) {
+        res.send(docs);
+        console.log('delete', id);
+    }).catch(function (err) {
+        res.send({ err: err });
+        throw err;
     });
 });
 
 router.post('/upload-pics', function (req, res) {
     // Note
-    // - write file to mongo
-    // - https://stackoverflow.com/a/43592498
+    // - https://gist.github.com/aheckmann/2408370
     res.send('respond with a resource');
 });
 

@@ -1,11 +1,10 @@
 ﻿'use strict';
+const path = require('path');
 const express = require('express');
 const router = express.Router();
 
 router.get('/', function (req, res) {
-    // Note
-    // - render guide items
-    res.render('index', { title: 'Express' });
+    res.sendFile(path.join(__dirname, '../public/test-post.html'));
 });
 
 module.exports = router;
