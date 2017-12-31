@@ -36,7 +36,6 @@
     <Compile Include="routes\user.js" />
     <Content Include="package.json" />
     <Content Include="public\index.html" />
-    <Content Include="README.md" />
     <Content Include="views\layout-header.ejs" />
     <Content Include="views\layout-footer.ejs" />
     <Content Include="views\error.ejs" />
