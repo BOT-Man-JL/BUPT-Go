@@ -32,13 +32,11 @@
     <Compile Include="app.js" />
     <Compile Include="model\article-schema.js" />
     <Compile Include="model\place-schema.js" />
-    <Compile Include="routes\index.js" />
     <Compile Include="routes\article.js" />
     <Compile Include="routes\user.js" />
     <Content Include="package.json" />
-    <Content Include="public\stylesheets\main.css" />
+    <Content Include="public\index.html" />
     <Content Include="README.md" />
-    <Content Include="views\index.ejs" />
     <Content Include="views\layout-header.ejs" />
     <Content Include="views\layout-footer.ejs" />
     <Content Include="views\error.ejs" />
@@ -46,9 +44,6 @@
   <ItemGroup>
     <Folder Include="model\" />
     <Folder Include="public\" />
-    <Folder Include="public\images\" />
-    <Folder Include="public\javascripts\" />
-    <Folder Include="public\stylesheets\" />
     <Folder Include="routes\" />
     <Folder Include="views\" />
   </ItemGroup>
