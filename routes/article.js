@@ -140,6 +140,16 @@ router.post('/delete', function (req, res) {
     });
 });
 
+router.post('/clear', function (req, res) {
+    Article.remove({}).then(function (docs) {
+        res.send(docs);
+        console.log('clear all');
+    }).catch(function (err) {
+        res.send({ err: err });
+        throw err;
+    })
+});
+
 router.post('/upload-pics', function (req, res) {
     // Note
     // - https://gist.github.com/aheckmann/2408370
