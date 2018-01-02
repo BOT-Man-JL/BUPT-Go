@@ -1,9 +1,9 @@
 <template>
   <div class="hello">
     <el-col :span="10">
-    <div class="example">
+      <div class="example">
         <el-row type="flex" align="middle" justify="space-around">
-        <img v-bind:src="imgSrc" width="50%" height="50%">
+        <img src="imgSrc" width="50%" height="50%">
         </el-row>
         <br />
         <el-row type="flex" align="middle" justify="space-around">
@@ -19,7 +19,7 @@
           </el-col>
           <el-col :span="2">
             <div class="grid-content bg-purple">
-            <i class="el-icon-loading"></i>  
+            <i class="el-icon-date"></i>  
             </div>          
           </el-col>
         </el-row>
@@ -36,7 +36,7 @@ export default {
       imgSrc: '/static/pics/u4.jpg',
       title: 'my title'
     }
-  }
+  },
 }
 </script>
 
