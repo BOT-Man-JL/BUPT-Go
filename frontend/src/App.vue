@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <h1>BUPT Go</h1>
     <router-view/>
   </div>
 </template>

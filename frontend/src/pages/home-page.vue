@@ -1,42 +1,40 @@
 <template>
-  <div class="hello">
-    <el-col :span="10">
-      <div class="example">
-        <el-row type="flex" align="middle" justify="space-around">
-        <img src="imgSrc" width="50%" height="50%">
-        </el-row>
-        <br />
-        <el-row type="flex" align="middle" justify="space-around">
-          <el-col :span="6">
-            <div class="grid-content bg-purple">
-            <h2>{{ title }}</h2>
-            </div>
-          </el-col>
-          <el-col :span="2">
-            <div class="grid-content bg-purple">
-            <i class="el-icon-setting"></i>
-            </div>
-          </el-col>
-          <el-col :span="2">
-            <div class="grid-content bg-purple">
-            <i class="el-icon-date"></i>  
-            </div>          
-          </el-col>
-        </el-row>
-      </div>
-    </el-col>
+  <div class="container">
+  <el-col :span="10">
+    <header-component></header-component>   <!--  展示引入的header组件 -->
+    <div class="content">
+          <!-- list组件展示区，并用v-for来将数据遍历，:xx="xxx" 是用来给子组件传递数据的 -->
+        <list-component v-for="item in items" :key="item.title"
+              :title="item.title" 
+              :img="item.img"
+        >
+        <hr />
+        </list-component>
+      </ul>
+    </div>
+  </el-col>
   </div>
 </template>
 
 <script>
+import headerComponent from './components/header-component'
+import listComponent from './components/list-component'
 export default {
   name: 'homePage',
   data () {
-    return {
-      imgSrc: '/static/pics/u4.jpg',
-      title: 'my title'
-    }
+      return{
+        items:[
+        {title:"my title", img:"/static/pics/u4.jpg"},
+        {title:"my title2", img:"/static/pics/u11.jpeg"},
+        {title:"my title3", img:"/static/pics/u19.jpeg"},
+        {title:"my title4", img:"/static/pics/u23.jpeg"},
+        ]
+      };
   },
+  components:{
+    headerComponent,
+    listComponent
+  }
 }
 </script>
 

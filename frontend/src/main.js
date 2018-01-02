@@ -6,7 +6,6 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 import App from './App'
 import homePage from './pages/home-page'
-import testAjaxPage from './pages/test-ajax'
 import articlePage from './pages/article-page'
 import searchPage from './pages/search-page'
 import resultPage from './pages/result-page'
@@ -29,7 +28,7 @@ new Vue({
                 component: homePage
             },
             {
-                path: '/article',
+                path: '/article/:articleId',
                 name: 'articlePage',
                 component: articlePage
             },
@@ -47,11 +46,6 @@ new Vue({
                 path: '/user',
                 name: 'userPage',
                 component: userPage
-            },
-            {
-                path: '/test-ajax',
-                name: 'testAjaxPage',
-                component: testAjaxPage
             },
         ]
     })
