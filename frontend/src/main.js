@@ -5,8 +5,12 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 import App from './App'
-import homePage from '@/components/home-page'
-import testAjaxPage from '@/components/test-ajax'
+import homePage from './pages/home-page'
+import testAjaxPage from './pages/test-ajax'
+import articlePage from './pages/article-page'
+import searchPage from './pages/search-page'
+import resultPage from './pages/result-page'
+import userPage from './pages/user-page'
 
 Vue.use(Router)
 Vue.use(ElementUI)
@@ -25,10 +29,30 @@ new Vue({
                 component: homePage
             },
             {
+                path: '/article',
+                name: 'articlePage',
+                component: articlePage
+            },
+            {
+                path: '/search',
+                name: 'searchPage',
+                component: searchPage
+            },
+            {
+                path: '/result',
+                name: 'resultPage',
+                component: resultPage
+            },
+            {
+                path: '/user',
+                name: 'userPage',
+                component: userPage
+            },
+            {
                 path: '/test-ajax',
                 name: 'testAjaxPage',
                 component: testAjaxPage
-            }
+            },
         ]
     })
 })
