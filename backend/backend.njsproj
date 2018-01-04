@@ -31,10 +31,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
-    <Compile Include="model\article-schema.js" />
-    <Compile Include="model\place-schema.js" />
-    <Compile Include="routes\article.js" />
-    <Compile Include="routes\user.js" />
+    <Compile Include="model\user.js" />
+    <Compile Include="model\article.js" />
+    <Compile Include="model\article-meta.js" />
+    <Compile Include="routes\article-api.js" />
+    <Compile Include="routes\user-api.js" />
     <Content Include="package.json" />
     <Content Include="public\index.html" />
     <Content Include="views\error.ejs" />

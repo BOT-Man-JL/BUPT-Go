@@ -1,58 +1,69 @@
 ﻿<!DOCTYPE html>
-
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
     <title>Test Post</title>
 </head>
 <body>
+    <h1>/article</h1>
+    <hr />
     <div>
         <span>ID: </span>
         <input type="text" name="" value=""
-               oninput="document.getElementById('view-item').setAttribute('href', '/article/?id=' + this.value);" />
-        <br />
-        <a id="view-item" href="/article/">View Item</a>
+               oninput="document.getElementById('view-item').setAttribute('href', '/article?id=' + this.value);" />
+        <a id="view-item" style="border: 1px solid; padding: 1px">View Item</a>
     </div>
     <hr />
     <div>
-        <a href="/article/hot">View Hot</a>
+        <span>Name: </span>
+        <input type="text" name="" value=""
+               oninput="document.getElementById('view-user').setAttribute('href', '/article/user?name=' + this.value);" />
+        <a id="view-user" style="border: 1px solid; padding: 1px">View User</a>
     </div>
     <hr />
     <div>
-        <a id="search" href="/article/search">Search</a>
+        <a id="search" href="/article/search" style="border: 1px solid; padding: 1px">Search</a>
     </div>
     <hr />
     <div>
-        <form action="/article/submit" method="post">
+        <form action="/article/submit" method="post" enctype="multipart/form-data">
+            <span>category: </span>
+            <select name="category">
+                <option value="美食">美食</option>
+                <option value="电影">电影</option>
+                <option value="展览" selected="selected">展览</option>
+                <option value="其他">其他</option>
+            </select>
+            <span>area: </span>
+            <select name="area">
+                <option value="东城区">东城区</option>
+                <option value="西城区">西城区</option>
+                <option value="朝阳区">朝阳区</option>
+                <option value="海淀区" selected="selected">海淀区</option>
+                <option value="丰台区">丰台区</option>
+                <option value="石景山区">石景山区</option>
+                <option value="其他">其他</option>
+            </select>
+            <span>dateBeg: </span>
+            <input type="date" name="dateBeg" value="2018-01-01" />
+            <span>dateEnd: </span>
+            <input type="date" name="dateEnd" value="2018-01-02" />
+            <span>location: </span>
+            <input type="text" name="location" value="Location of this Place" />
+            <span>contact: </span>
+            <input type="text" name="contact" value="010-12345" />
+            <span>cost: </span>
+            <input type="text" name="cost" value="人均 ￥100 ~ 200" />
+            <br />
+            <br />
             <span>ID: </span>
             <input type="text" name="id" value="" />
-            <span>(empty for creation)</span>
-            <br />
             <span>title: </span>
-            <input type="text" name="title" value="" />
-            <br />
-            <span>author: </span>
-            <input type="text" name="author" value="" />
-            <br />
-            <input type="hidden" name="type" value="guide" />
-            <input type="submit" name="" value="Submit Guide" />
-        </form>
-    </div>
-    <hr />
-    <div>
-        <form action="/article/submit" method="post">
-            <span>ID: </span>
-            <input type="text" name="id" value="" />
-            <span>(empty for creation)</span>
-            <br />
-            <span>title: </span>
-            <input type="text" name="title" value="" />
-            <br />
-            <span>author: </span>
-            <input type="text" name="author" value="" />
-            <br />
-            <input type="hidden" name="type" value="place" />
-            <input type="submit" name="" value="Submit Place" />
+            <input type="text" name="title" value="Article Title" />
+            <span>text: </span>
+            <textarea rows="5" cols="60" name="text">Modularity is something every software designer does in their sleep. Modularity is something every software designer does in their sleep. Modularity is something every software designer does in their sleep. Modularity is something every software designer does in their sleep. Modularity is something every software designer does in their sleep.</textarea>
+            <input type="file" name="image" value="" />
+            <input type="submit" name="" value="Submit" />
         </form>
     </div>
     <hr />
@@ -60,22 +71,72 @@
         <form action="/article/delete" method="post">
             <span>ID: </span>
             <input type="text" name="id" value="" />
-            <br />
             <input type="submit" name="" value="Delete" />
         </form>
     </div>
     <hr />
+    <h1>/user (<span id="login-user"></span>)</h1>
+    <img id="user-avatar" style="width: 0; height: 0" />
+    <hr />
     <div>
-        <form action="/article/clear" method="post">
-            <input type="submit" name="" value="Clear" />
+        <form action="/user/login" method="post">
+            <span>Name: </span>
+            <input type="text" name="name" value="John" />
+            <span>Pass: </span>
+            <input type="password" name="pass" value="Lee" />
+            <input type="submit" name="" value="Login" />
         </form>
     </div>
     <hr />
     <div>
-        <form action="/article/upload-image" method="post" enctype="multipart/form-data">
-            <input type="file" multiple="multiple" name="images" value="" />
-            <input type="submit" name="" value="Upload Image" />
+        <form action="/user/signup" method="post" enctype="multipart/form-data">
+            <span>Name: </span>
+            <input type="text" name="name" value="John" />
+            <span>Pass: </span>
+            <input type="password" name="pass" value="Lee" />
+            <span>Avatar: </span>
+            <input type="file" name="image" value="" />
+            <input type="submit" name="" value="Signup" />
         </form>
     </div>
+    <hr />
+    <div>
+        <form action="/user/logout" method="post">
+            <input type="submit" name="" value="Logout" />
+        </form>
+    </div>
+    <hr />
+    <h1>#test</h1>
+    <hr />
+    <div>
+        <form action="/article/clear" method="post">
+            <input type="submit" name="" value="Clear Articles" />
+        </form>
+    </div>
+    <hr />
+    <div>
+        <form action="/user/clear" method="post">
+            <input type="submit" name="" value="Clear Users" />
+        </form>
+    </div>
+    <script>
+        // Cookie Handler
+        var parsedCookies = {};
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var pair = cookies[i].trim().split('=');
+            parsedCookies[pair[0]] = pair[1];
+        }
+
+        document.getElementById('login-user').innerHTML =
+            parsedCookies['userName'] || 'no login';
+
+        if (parsedCookies['userAvatar']) {
+            document.getElementById('user-avatar').setAttribute(
+                'src', parsedCookies['userAvatar']);
+            document.getElementById('user-avatar').style.width = '64px';
+            document.getElementById('user-avatar').style.height = '64px';
+        }
+    </script>
 </body>
 </html>
