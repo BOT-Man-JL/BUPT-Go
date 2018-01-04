@@ -41,14 +41,17 @@ router.get('/user', function (req, res) {
     }
 
     const query = { author: name };
-    Article.find(query).then(function (docs) {
-        // Note: (docs.length == 0) is not an error
-        res.send(docs);
+    Article.find(query)
+        .select({ _id: 1, title: 1, timestamp: 1 })
+        .sort({ timestamp: -1 })
+        .then(function (docs) {
+            // Note: (docs.length == 0) is not an error
+            res.send(docs);
 
-    }).catch(function (err) {
-        res.status(500).send({ err });
-        console.error(err);
-    });
+        }).catch(function (err) {
+            res.status(500).send({ err });
+            console.error(err);
+        });
 });
 
 router.get('/search', function (req, res) {
@@ -62,13 +65,15 @@ router.get('/search', function (req, res) {
         query.dateEnd = { $gt: req.query.date };
     }
 
-    Article.find(query).then(function (docs) {
-        res.send(docs);
-        console.log('query search');
-    }).catch(function (err) {
-        res.status(500).send({ err });
-        console.error(err);
-    });
+    Article.find(query)
+        .select({ _id: 1, author: 1, timestamp: 1, meta: 1, title: 1, img: 1 })
+        .then(function (docs) {
+            res.send(docs);
+            console.log('query search');
+        }).catch(function (err) {
+            res.status(500).send({ err });
+            console.error(err);
+        });
 });
 
 // Post

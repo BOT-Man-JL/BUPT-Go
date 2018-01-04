@@ -8,21 +8,46 @@
     <h1>/article</h1>
     <hr />
     <div>
-        <span>ID: </span>
-        <input type="text" name="" value=""
-               oninput="document.getElementById('view-item').setAttribute('href', '/article?id=' + this.value);" />
-        <a id="view-item" style="border: 1px solid; padding: 1px">View Item</a>
+        <form action="/article">
+            <span>id: </span>
+            <input type="text" name="id" value="" />
+            <input type="submit" name="" value="View Item" />
+        </form>
     </div>
     <hr />
     <div>
-        <span>Name: </span>
-        <input type="text" name="" value=""
-               oninput="document.getElementById('view-user').setAttribute('href', '/article/user?name=' + this.value);" />
-        <a id="view-user" style="border: 1px solid; padding: 1px">View User</a>
+        <form action="/article/user">
+            <span>name: </span>
+            <input type="text" name="name" value="John" />
+            <input type="submit" name="" value="View User" />
+        </form>
     </div>
     <hr />
     <div>
-        <a id="search" href="/article/search" style="border: 1px solid; padding: 1px">Search</a>
+        <form action="/article/search">
+            <span>category: </span>
+            <select name="category">
+                <option value="" selected="selected"></option>
+                <option value="美食">美食</option>
+                <option value="电影">电影</option>
+                <option value="展览">展览</option>
+                <option value="其他">其他</option>
+            </select>
+            <span>area: </span>
+            <select name="area">
+                <option value="" selected="selected"></option>
+                <option value="东城区">东城区</option>
+                <option value="西城区">西城区</option>
+                <option value="朝阳区">朝阳区</option>
+                <option value="海淀区">海淀区</option>
+                <option value="丰台区">丰台区</option>
+                <option value="石景山区">石景山区</option>
+                <option value="其他">其他</option>
+            </select>
+            <span>date: </span>
+            <input type="date" name="date" value="" />
+            <input type="submit" name="" value="Search" />
+        </form>
     </div>
     <hr />
     <div>
@@ -47,7 +72,7 @@
             <span>dateBeg: </span>
             <input type="date" name="dateBeg" value="2018-01-01" />
             <span>dateEnd: </span>
-            <input type="date" name="dateEnd" value="2018-01-02" />
+            <input type="date" name="dateEnd" value="2018-01-03" />
             <span>location: </span>
             <input type="text" name="location" value="Location of this Place" />
             <span>contact: </span>
