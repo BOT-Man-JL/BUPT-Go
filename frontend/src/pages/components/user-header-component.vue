@@ -4,8 +4,8 @@
     <el-row type="flex" align="middle" justify="space-around">
         <el-col>
           <div class="grid-content bg-purple">
-          <router-link to="/user">
-          <i class="el-icon-setting"></i>
+          <router-link :to="{ name:'homePage' }" replace>
+          <i class="el-icon-back"></i>
           </router-link>
           </div>
         </el-col>
@@ -24,8 +24,8 @@
         </el-col>
         <el-col>
           <div class="grid-content bg-purple">
-          <router-link to="/result">
-          <i class="el-icon-search"></i>
+          <router-link :to="{ name:'editPage' }">
+          <i class="el-icon-edit"></i>
           </router-link>
           </div>
         </el-col>
@@ -36,7 +36,7 @@
 
 <script>
     export default {
-        name: 'homeHeaderComponent',
+        name: 'userHeaderComponent',
         data() {
             return {
             	input:''

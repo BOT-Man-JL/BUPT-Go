@@ -6,7 +6,7 @@
 
 <script>
     export default {
-        name: 'articlePage',
+        name: 'editPage',
         data() {
             return null;
         }
