@@ -11,6 +11,8 @@
         </el-col>
         <el-col>
           <div class="grid-content bg-purple">
+          <router-link :to="{ name:'searchPage', 
+                        params: { searchInput:input} }">
           <el-input 
             size="small" 
             placeholder="请输入内容"
@@ -18,6 +20,7 @@
     		    v-model="input"
           >
           </el-input>
+          </router-link>
           </div>
         </el-col>
         <el-col>

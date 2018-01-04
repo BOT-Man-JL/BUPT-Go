@@ -1,6 +1,6 @@
 <template>
     <div class="hello">
-        <p>result here</p>
+        <p>result {{$route.params.articleInput}} here</p>
     </div>
 </template>
 

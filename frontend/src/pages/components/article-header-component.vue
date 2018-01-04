@@ -4,7 +4,7 @@
     <el-row type="flex" align="middle" justify="space-around">
         <el-col>
           <div class="grid-content bg-purple">
-          <router-link :to="{ name:'homePage' }">
+          <router-link :to="{ name:'homePage' }" replace>
           <i class="el-icon-back"></i>
           </router-link>
           </div>
@@ -22,7 +22,7 @@
         </el-col>
         <el-col>
           <div class="grid-content bg-purple">
-          <router-link to="/search">
+          <router-link :to="{ name:'resultPage', params: { articleInput: input }}">
           <i class="el-icon-search"></i>
           </router-link>
           </div>
