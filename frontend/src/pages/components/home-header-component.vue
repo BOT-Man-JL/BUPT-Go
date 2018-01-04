@@ -11,6 +11,8 @@
         </el-col>
         <el-col>
           <div class="grid-content bg-purple">
+          <router-link :to="{ name:'searchPage', 
+                        params: { searchInput:input} }">
           <el-input 
             size="small" 
             placeholder="请输入内容"
@@ -18,11 +20,12 @@
     		    v-model="input"
           >
           </el-input>
+          </router-link>
           </div>
         </el-col>
         <el-col>
           <div class="grid-content bg-purple">
-          <router-link to="/search">
+          <router-link to="/result">
           <i class="el-icon-search"></i>
           </router-link>
           </div>
@@ -34,7 +37,7 @@
 
 <script>
     export default {
-        name: 'headerComponents',
+        name: 'homeHeaderComponent',
         data() {
             return {
             	input:''

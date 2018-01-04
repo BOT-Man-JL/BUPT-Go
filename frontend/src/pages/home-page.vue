@@ -1,15 +1,15 @@
 <template>
   <div class="container">
   <el-col :span="10">
-    <header-component></header-component>   <!--  展示引入的header组件 -->
+    <home-header-component></home-header-component>   <!--  展示引入的header组件 -->
     <div class="content">
           <!-- list组件展示区，并用v-for来将数据遍历，:xx="xxx" 是用来给子组件传递数据的 -->
-        <list-component v-for="item in items" :key="item.title"
+        <article-list-component v-for="item in items" :key="item.title"
               :title="item.title" 
               :img="item.img"
         >
         <hr />
-        </list-component>
+        </article-list-component>
       </ul>
     </div>
   </el-col>
@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import headerComponent from './components/header-component'
-import listComponent from './components/list-component'
+import homeHeaderComponent from './components/home-header-component'
+import articleListComponent from './components/article-list-component'
 export default {
   name: 'homePage',
   data () {
@@ -32,8 +32,8 @@ export default {
       };
   },
   components:{
-    headerComponent,
-    listComponent
+    homeHeaderComponent,
+    articleListComponent
   }
 }
 </script>

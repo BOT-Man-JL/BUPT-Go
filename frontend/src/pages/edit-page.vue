@@ -1,12 +1,12 @@
 <template>
     <div class="hello">
-        <p>result {{$route.params.articleInput}} here</p>
+        <p>article {{ $route.params.articleId }} here</p>
     </div>
 </template>
 
 <script>
     export default {
-        name: 'resultPage',
+        name: 'articlePage',
         data() {
             return null;
         }

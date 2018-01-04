@@ -1,6 +1,7 @@
 <template>
   <div>
-    <router-link :to="{ name:'articlePage', params: { articleId: 123 } }">
+    <router-link :to="{ name:'articlePage', 
+                        params: { articleTitle: title, articleImg: img} }">
       <el-col>
         <div class="example">
           <el-row type="flex" align="middle" justify="space-around">
@@ -33,7 +34,7 @@
 
 <script>
     export default {
-        name: 'listComponent',
+        name: 'articleListComponent',
         props:['title','img']
     }
 </script>

@@ -10,6 +10,7 @@ import articlePage from './pages/article-page'
 import searchPage from './pages/search-page'
 import resultPage from './pages/result-page'
 import userPage from './pages/user-page'
+import editPage from './pages/edit-page'
 
 Vue.use(Router)
 Vue.use(ElementUI)
@@ -28,7 +29,7 @@ new Vue({
                 component: homePage
             },
             {
-                path: '/article/:articleId',
+                path: '/article',
                 name: 'articlePage',
                 component: articlePage
             },
