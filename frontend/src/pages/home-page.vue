@@ -1,16 +1,15 @@
 <template>
   <div class="container">
   <el-col :span="10">
-    <home-header-component></home-header-component>   <!--  展示引入的header组件 -->
+    <home-header-component></home-header-component> 
     <div class="content">
-          <!-- list组件展示区，并用v-for来将数据遍历，:xx="xxx" 是用来给子组件传递数据的 -->
         <article-list-component v-for="item in items" :key="item.title"
               :title="item.title" 
               :img="item.img"
+              :id="12"
         >
         <hr />
         </article-list-component>
-      </ul>
     </div>
   </el-col>
   </div>

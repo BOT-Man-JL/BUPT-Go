@@ -3,9 +3,8 @@
     	<el-col :span="10">
         <!--<p>article {{ $route.params.searchInput }} here</p>-->
         <article-header-component></article-header-component>
-		<search-component v-for="item in items" :key="item.title"
-              					:title="item.title" :img="item.img"
-		></search-component>
+
+		<search-component></search-component>
         </el-col>
     </div>
 </template>
@@ -17,12 +16,7 @@
         name: 'searchPage',
         data() {
             return {
-            	items:[
-        			{title:"my title", img:"/static/pics/u4.jpg"},
-        			{title:"my title2", img:"/static/pics/u11.jpeg"},
-        			{title:"my title3", img:"/static/pics/u19.jpeg"},
-        			{title:"my title4", img:"/static/pics/u23.jpeg"},
-        		]
+            	
             };
         },  
         components:{
