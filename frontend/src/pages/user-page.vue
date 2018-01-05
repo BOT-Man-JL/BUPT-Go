@@ -98,8 +98,8 @@
         cookies[pair[0]] = pair[1];
       }
 
-      //cookies['userName'] = 'John';
-      //cookies['userAvatar'] = '/static/pics/u14.jpeg';
+      cookies['userName'] = 'John';
+      cookies['userAvatar'] = '/static/pics/u14.jpeg';
 
       return {
         isLogin: cookies['userName'] != null,
