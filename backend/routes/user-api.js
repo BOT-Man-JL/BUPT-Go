@@ -12,6 +12,10 @@ const errBadModelSave = 'Unable to save user account';
 const errAlreadyLogin = 'Please logout first';
 const errNoLogin = 'Please login first';
 
+const msgLogin = 'Login Done';
+const msgSignup = 'Signup Done';
+const msgLogout = 'Logout Done';
+
 router.post('/login', function (req, res) {
     const userName = req.signedCookies['userNameSigned'];
     if (userName) {
@@ -35,7 +39,7 @@ router.post('/login', function (req, res) {
         res.cookie('userNameSigned', name, { signed: true });
         res.cookie('userAvatar', avatar);
 
-        res.send({ msg: 'done' });
+        res.send({ msg: msgLogin });
         console.log('login', name, pass, avatar);
 
     }).catch(function (err) {
@@ -70,7 +74,7 @@ router.post('/signup', function (req, res) {
         res.cookie('userNameSigned', name, { signed: true });
         res.cookie('userAvatar', avatar);
 
-        res.send({ msg: 'done' });
+        res.send({ msg: msgSignup });
         console.log('signup', name, pass, avatar);
 
     }).catch(function (err) {
@@ -93,7 +97,7 @@ router.post('/logout', function (req, res) {
     res.clearCookie('userNameSigned');
     res.clearCookie('userAvatar');
 
-    res.send({ msg: 'done' });
+    res.send({ msg: msgLogout });
     console.log('logout', userName);
 });
 

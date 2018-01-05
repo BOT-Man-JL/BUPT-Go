@@ -14,6 +14,10 @@ const errInvalidArticleMeta = 'Invalid article meta data';
 const errNoArticle = 'No such article';
 const errNoLogin = 'Please login first';
 
+const msgCreate = 'Create OK';
+const msgUpdate = 'Update OK';
+const msgDelete = 'Delete OK';
+
 // Get
 
 router.get('/', function (req, res) {
@@ -140,7 +144,7 @@ router.post('/submit', function (req, res) {
                 return res.status(400).send({ err: errNoArticle });
             }
 
-            res.send({ msg: 'done' });
+            res.send({ msg: msgUpdate });
             console.log('update', id, 'to', article);
 
         }).catch(function (err) {
@@ -159,7 +163,7 @@ router.post('/submit', function (req, res) {
                 return res.status(400).send({ err: errBadModelSave });
             }
 
-            res.send({ msg: 'done' });
+            res.send({ msg: msgCreate });
             console.log('create', article);
 
         }).catch(function (err) {
@@ -186,7 +190,7 @@ router.post('/delete', function (req, res) {
             return res.status(400).send({ err: errNoArticle });
         }
 
-        res.send({ msg: 'done' });
+        res.send({ msg: msgDelete });
         console.log('delete', id);
 
     }).catch(function (err) {
