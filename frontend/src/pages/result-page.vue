@@ -3,32 +3,21 @@
     <el-header style="text-align: center">
       <el-row type="flex" align="middle" justify="space-around">
         <el-col :span="4">
-          <div>
-            <router-link :to="{ name:'userPage' }">
-              <i class="el-icon-setting"></i>
-            </router-link>
-          </div>
+          <router-link :to="{ name:'homePage' }">
+            <i class="el-icon-back"></i>
+          </router-link>
         </el-col>
         <el-col :span="16">
-          <div>
-            <h1>BUPT Go</h1>
-          </div>
+          <h1>搜索结果</h1>
         </el-col>
         <el-col :span="4">
-          <div>
-            <router-link :to="{ name:'searchPage' }">
-              <i class="el-icon-search"></i>
-            </router-link>
-          </div>
+          <router-link :to="{ name:'searchPage' }">
+            <i class="el-icon-search"></i>
+          </router-link>
         </el-col>
       </el-row>
     </el-header>
-    <div class="content">
-      <!-- list组件展示区，并用v-for来将数据遍历，:xx="xxx" 是用来给子组件传递数据的 -->
-      <article-list-component v-bind="values">
-        <hr />
-      </article-list-component>
-    </div>
+    <article-list-item-component v-for="item in items" v-bind="item" />
   </div>
 </template>
 
@@ -36,22 +25,29 @@
   import articleListItemComponent from './components/article-list-item-component'
   export default {
     name: 'resultPage',
+    props: ['category', 'area', 'date'],
     data() {
       return {
-        values: {
-          text: "Prop 是单向绑定的：当父组件的属性变化时，将传导给子组件，但是	反过来不会。这是为了防止子组件无意间修改了父组件的状态，来避免	 应用的数据流变得难以理解。另外，每次父组件更新时，子组件的所有 prop 都会更新为最新值。这意味着你不应该在子组件内部改变 prop。如果你这么做了，Vue 会在控制台给出警告。",
-          telephone: "123454566",
-          address: "北京邮电大学",
-          title: this.$route.params.articleInput,
-          img: this.$route.params.articleImg
-        }
+        items: []
       };
     },
     components: {
       articleListItemComponent
+    },
+    created() {
+      document.title = '搜索结果 | BUPT Go';
+      this.items = [
+        { id: 1, title: 'my title1', img: '/static/pics/u14.jpeg', author: 'John', category: '美食', area: '东城区' },
+        { id: 2, title: 'my title2', img: '/static/pics/u11.jpeg', author: 'John', category: '电影', area: '西城区' },
+        { id: 3, title: 'my title3', img: '/static/pics/u19.jpeg', author: 'Jack', category: '展览', area: '朝阳区' },
+        { id: 4, title: 'my title4', img: '/static/pics/u23.jpeg', author: 'Jack', category: '其他', area: '海淀区' },
+      ];
     }
   }
 </script>
 
 <style scoped>
+  a {
+    color: #808080;
+  }
 </style>

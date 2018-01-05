@@ -33,6 +33,7 @@ new Vue({
                 name: 'articlePage',
                 component: articlePage,
                 props: (route) => ({
+                    id: route.query.id,
                     title: route.params.title,
                     img: route.params.img,
                     author: route.params.author
@@ -46,7 +47,12 @@ new Vue({
             {
                 path: '/result',
                 name: 'resultPage',
-                component: resultPage
+                component: resultPage,
+                props: (route) => ({
+                    category: route.query.category,
+                    area: route.query.area,
+                    date: route.query.date
+                })
             },
             {
                 path: '/user',
