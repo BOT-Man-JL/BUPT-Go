@@ -22,13 +22,25 @@
       <h1>{{ title }}</h1>
       <div>
         <el-row type="flex" align="middle" justify="center">
-          <el-col v-if="author">
-            <p>作者：{{ author }}</p>
+          <el-col :span="9" v-if="timestamp">
+            <p>{{ timestamp }}</p>
           </el-col>
-          <el-col v-if="contact">
+          <el-col :spam="5" align="left" v-if="author">
+            <p>{{ author }}</p>
+          </el-col>
+          <el-col :spam="10" align="right">
+          	<el-tag size="mini">{{ category }}</el-tag>
+          	<el-tag size="mini">{{ area }}</el-tag>
+          </el-col>
+        </el-row>
+        <el-row type="flex" align="middle" justify="center">
+          <el-col :span="6" align="middle" v-if="cost">
+            <p>人均花费：{{ cost }}</p>
+          </el-col>
+          <el-col :span="9" align="middle" v-if="contact">
             <p>联系方式：{{ contact }}</p>
           </el-col>
-          <el-col v-if="location">
+          <el-col :span="9" align="middle" v-if="location">
             <p>地址：{{ location }}</p>
           </el-col>
         </el-row>
@@ -45,9 +57,13 @@
     created() {
       if (!this.title)
         this.title = 'Untitled';
-      this.contact = '123454566';
-      this.location = '北京邮电大学';
-      this.text = "Prop 是单向绑定的：当父组件的属性变化时，将传导给子组件，但是	反过来不会。这是为了防止子组件无意间修改了父组件的状态，来避免	 应用的数据流变得难以理解。另外，每次父组件更新时，子组件的所有 prop 都会更新为最新值。这意味着你不应该在子组件内部改变 prop。如果你这么做了，Vue 会在控制台给出警告。";
+    	this.timestamp = '2018-01-01';
+    	this.category = "美食";
+    	this.area = "海淀区";
+    	this.cost = '200';
+      	this.contact = '123454566';
+      	this.location = '北京邮电大学';
+      	this.text = "Prop 是单向绑定的：当父组件的属性变化时，将传导给子组件，但是	反过来不会。这是为了防止子组件无意间修改了父组件的状态，来避免	 应用的数据流变得难以理解。另外，每次父组件更新时，子组件的所有 prop 都会更新为最新值。这意味着你不应该在子组件内部改变 prop。如果你这么做了，Vue 会在控制台给出警告。";
       document.title = this.title + ' | BUPT Go';
     }
   }
