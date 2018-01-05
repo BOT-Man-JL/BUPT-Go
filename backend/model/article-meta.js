@@ -1,5 +1,6 @@
 ﻿'use strict';
 const mongoose = require('mongoose');
+const options = require('../../common/article-common.json');
 
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
@@ -8,12 +9,12 @@ const schema = new Schema({
     category: {
         type: String,
         required: true,
-        enum: ['美食', '电影', '展览', '其他']
+        enum: options.categoryOptions
     },
     area: {
         type: String,
         required: true,
-        enum: ['东城区', '西城区', '朝阳区', '海淀区', '丰台区', '石景山区', '其他']
+        enum: options.areaOptions
     },
     dateBeg: {
         type: Date,

@@ -7,6 +7,11 @@ Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "backend", "backend\backend.
 EndProject
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "frontend", "frontend\frontend.njsproj", "{C1A09B88-CBCF-4D52-BB42-0FA04AB0488C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{08F682DA-04B1-496C-8536-6EE3E3E978F3}"
+	ProjectSection(SolutionItems) = preProject
+		common\article-common.json = common\article-common.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
