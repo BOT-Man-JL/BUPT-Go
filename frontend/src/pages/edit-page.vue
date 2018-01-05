@@ -73,11 +73,17 @@
     			</el-button>    			
     		</el-col>
     	</el-row>
+    	<br />
+    	<el-row>
+    	<signup-component></signup-component>
+    	</el-row>
     </el-col>
     </div>
 </template>
 
 <script>
+	import signupComponent from './components/signup-component'
+	import loginComponent from './components/login-component'
     export default {
         name: 'editPage',
         data() {
@@ -94,12 +100,16 @@
         methods: {
 	      handleRemove(file, fileList) {
 	        console.log(file, fileList);
-	    },
+	      },
 	      handlePictureCardPreview(file) {
 	        this.dialogImageUrl = file.url;
 	        this.dialogVisible = true;
-	    }
-    }
+	      }
+    	},
+    	components:{
+    		signupComponent,
+    		loginComponent
+  		}
     }
 </script>
 
