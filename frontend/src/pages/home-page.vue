@@ -4,7 +4,7 @@
       <el-row type="flex" align="middle" justify="space-around">
         <el-col :span="4">
           <router-link :to="{ name:'userPage' }">
-            <i class="el-icon-setting"></i>
+            <i class="el-icon-menu"></i>
           </router-link>
         </el-col>
         <el-col :span="16">

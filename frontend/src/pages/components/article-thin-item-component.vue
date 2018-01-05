@@ -1,5 +1,6 @@
 <template>
-  <el-row type="flex" align="middle" justify="space-around">
+  <div>
+  <el-row type="flex" align="bottom" justify="space-around">
     <el-col :span="16" align="left">
       <router-link :to="{ name:'articlePage', query: { id: id },
                       params: { title: title, img: img, author: author } }">
@@ -14,6 +15,8 @@
       <el-button @click="onDelete" icon="el-icon-delete" size="mini" />
     </el-col>
   </el-row>
+  <hr height="1px" />
+  </div>
 </template>
 
 <script>
