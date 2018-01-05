@@ -74,10 +74,6 @@ router.get('/search', function (req, res) {
         query.category = req.query.category;
     if (req.query.area)
         query.area = req.query.area;
-    if (req.query.date) {
-        query.dateBeg = { $lt: req.query.date };
-        query.dateEnd = { $gt: req.query.date };
-    }
 
     Article.find(query)
         .select({ _id: 1, author: 1, timestamp: 1, meta: 1, title: 1, img: 1 })
@@ -111,15 +107,12 @@ router.post('/submit', function (req, res) {
     const articleMeta = {
         category: req.body.category,
         area: req.body.area,
-        dateBeg: req.body.dateBeg,
-        dateEnd: req.body.dateEnd,
         location: req.body.location,
         contact: req.body.contact,
         cost: req.body.cost
     };
 
-    if (!articleMeta.category || !articleMeta.area ||
-        !articleMeta.dateBeg || !articleMeta.dateEnd) {
+    if (!articleMeta.category || !articleMeta.area) {
         return res.status(400).send({ err: errInvalidArticleMeta });
     }
 

@@ -16,14 +16,6 @@ const schema = new Schema({
         required: true,
         enum: options.areaOptions
     },
-    dateBeg: {
-        type: Date,
-        required: true
-    },
-    dateEnd: {
-        type: Date,
-        required: true
-    },
     location: String,
     contact: String,
     cost: String
