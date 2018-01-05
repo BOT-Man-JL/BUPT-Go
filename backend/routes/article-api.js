@@ -54,6 +54,20 @@ router.get('/user', function (req, res) {
         });
 });
 
+router.get('/recent', function (req, res) {
+    Article.find()
+        .sort({ timestamp: -1 })
+        .select({ _id: 1, author: 1, timestamp: 1, meta: 1, title: 1, img: 1 })
+        .then(function (docs) {
+            // Note: (docs.length == 0) is not an error
+            res.send(docs);
+
+        }).catch(function (err) {
+            res.status(500).send({ err });
+            console.error(err);
+        });
+});
+
 router.get('/search', function (req, res) {
     const query = {};
     if (req.query.category)
@@ -68,8 +82,9 @@ router.get('/search', function (req, res) {
     Article.find(query)
         .select({ _id: 1, author: 1, timestamp: 1, meta: 1, title: 1, img: 1 })
         .then(function (docs) {
+            // Note: (docs.length == 0) is not an error
             res.send(docs);
-            console.log('query search');
+
         }).catch(function (err) {
             res.status(500).send({ err });
             console.error(err);
