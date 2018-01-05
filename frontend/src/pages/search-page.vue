@@ -37,13 +37,7 @@
         </el-select>
       </el-row>
       <el-row class="input-row">
-        <el-date-picker style="width:80%" v-model="date"
-                        type="date" placeholder="选择日期">
-        </el-date-picker>
-      </el-row>
-      <el-row class="input-row">
-        <router-link :to="{ name:'resultPage', query: { category: category, area: area,
-                     date: date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() } }">
+        <router-link :to="{ name:'resultPage', query: { category: category, area: area } }">
           <el-button type="primary" style="width:60%">
             搜索
             <i class="el-icon-search el-icon--right"></i>
@@ -62,12 +56,11 @@
       return {
         categoryOptions: options.categoryOptions,
         areaOptions: options.areaOptions,
-        category :'',
-        area: '',
-        date: new Date()
+        category: '',
+        area: ''
       }
     },
-    created() {
+    mounted() {
       document.title = '筛选文章 | BUPT Go';
     }
   }
