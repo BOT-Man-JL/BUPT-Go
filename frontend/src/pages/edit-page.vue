@@ -129,11 +129,12 @@
 
         setTimeout(function () {
           loading.close();
-          message({ message: 'done', type: 'success', duration: 1500 });
+          message({ message: 'done', type: 'success', duration: 1500, showClose: true });
           router.push({ name: 'userPage' });
         }, 1000);
       },
       onDelete() {
+
       },
       onSelectImage(file, fileList) {
         if (fileList && fileList[0])
