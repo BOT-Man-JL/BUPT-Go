@@ -26,6 +26,9 @@
         <img :src="userAvatar"
              style="width: 64px; height: 64px; border-radius: 32px" />
         <span>{{ userName + '，欢迎发现更大的世界' }}</span>
+        <el-button type="primary" @click="onLogout">
+          注销
+        </el-button>
       </h2>
       <article-thin-item-component v-for="item in items" v-bind="item" :key="item.id" />
     </div>
@@ -47,7 +50,7 @@
     <!-- Login -->
     <div v-if="!isLogin && !inSignupPage">
       <el-row class="input-row">
-        <el-button type="primary" style="width:80%">
+        <el-button type="primary" style="width:80%" @click="onLogin">
           登录
         </el-button>
       </el-row>
@@ -71,7 +74,7 @@
         </el-upload>
       </el-row>
       <el-row class="input-row">
-        <el-button type="primary" style="width:80%">
+        <el-button type="primary" style="width:80%" @click="onSignup">
           注册
         </el-button>
       </el-row>
@@ -84,6 +87,17 @@
 </template>
 
 <script>
+  function getCookies() {
+    var cookies = {};
+    var rawCookies = document.cookie.split(';');
+    for (var i = 0; i < rawCookies.length; i++) {
+      var pair = rawCookies[i].trim().split('=');
+      cookies[pair[0]] = pair[1];
+    }
+    return cookies;
+  }
+
+  import axios from 'axios'
   import articleThinItemComponent from './components/article-thin-item-component'
   export default {
     name: 'userPage',
@@ -91,33 +105,122 @@
       articleThinItemComponent
     },
     data() {
-      var cookies = {};
-      var rawCookies = document.cookie.split(';');
-      for (var i = 0; i < rawCookies.length; i++) {
-        var pair = rawCookies[i].trim().split('=');
-        cookies[pair[0]] = pair[1];
-      }
-
-      cookies['userName'] = 'John';
-      cookies['userAvatar'] = '/static/pics/u14.jpeg';
-
+      var cookies = getCookies();
       return {
+        // check login
         isLogin: cookies['userName'] != null,
         inSignupPage: false,
-        userName: cookies['userName'],
-        userAvatar: cookies['userAvatar'],
+        // not login
         name: '',
         pass: '',
         file: null,
-        items: [
-          { id: 1, title: 'my title1', timestamp: '2018-01-01' },
-          { id: 2, title: 'my title2', timestamp: '2018-01-01' },
-          { id: 3, title: 'my title3', timestamp: '2018-01-01' },
-          { id: 4, title: 'my title4', timestamp: '2018-01-01' },
-        ]
+        // is login
+        userName: cookies['userName'],
+        userAvatar: cookies['userAvatar'],
+        items: []
       };
     },
+    mounted() {
+      document.title = '个人管理 | BUPT Go';
+      this.checkLogin();
+    },
     methods: {
+      checkLogin() {
+        var cookies = getCookies();
+        if (!cookies['userName']) {
+          this.isLogin = false;
+          return;
+        }
+        this.isLogin = true;
+
+        const url = '/article/user';
+        const params = { name: cookies['userName'] };
+
+        var vm = this;
+        const loading = vm.$loading({ lock: true });
+        axios.get(url, { params }).then(function (res) {
+          vm.items = [];
+          for (const item of res.data) {
+            vm.items.push({
+              id: item._id,
+              timestamp: new Date(item.timestamp).toLocaleString(),
+              title: item.title
+            });
+          }
+
+          loading.close();
+        }).catch(function (e) {
+          loading.close();
+          vm.$message.error({
+            message: e.response.data.err, showClose: true
+          });
+        });
+      },
+      onLogin() {
+        const url = '/user/login';
+        const data = new FormData();
+        data.append('name', this.name);
+        data.append('pass', this.pass);
+
+        var vm = this;
+        const loading = vm.$loading({ lock: true });
+        axios.post(url, data).then(function (res) {
+          vm.$message({
+            message: res.data.msg, showClose: true
+          });
+          vm.checkLogin();
+
+          loading.close();
+        }).catch(function (e) {
+          loading.close();
+          vm.$message.error({
+            message: e.response.data.err, showClose: true
+          });
+        });
+      },
+      onSignup() {
+        const url = '/user/signup';
+        const data = new FormData();
+        data.append('name', this.name);
+        data.append('pass', this.pass);
+        data.append('image', this.file);
+
+        var vm = this;
+        const loading = vm.$loading({ lock: true });
+        axios.post(url, data).then(function (res) {
+          vm.$message({
+            message: res.data.msg, showClose: true
+          });
+          vm.checkLogin();
+
+          loading.close();
+        }).catch(function (e) {
+          loading.close();
+          vm.$message.error({
+            message: e.response.data.err, showClose: true
+          });
+        });
+      },
+      onLogout() {
+        const url = '/user/logout';
+        const data = new FormData();
+
+        var vm = this;
+        const loading = vm.$loading({ lock: true });
+        axios.post(url, data).then(function (res) {
+          vm.$message({
+            message: res.data.msg, showClose: true
+          });
+          vm.checkLogin();
+
+          loading.close();
+        }).catch(function (e) {
+          loading.close();
+          vm.$message.error({
+            message: e.response.data.err, showClose: true
+          });
+        });
+      },
       onSelectImage(file, fileList) {
         if (fileList && fileList[0])
           this.file = fileList[0].raw;

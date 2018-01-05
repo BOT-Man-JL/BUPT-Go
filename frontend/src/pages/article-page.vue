@@ -68,16 +68,12 @@
     },
     mounted() {
       document.title = '文章 | BUPT Go';
-      const url = '/article?id=' + this.id;
+      const url = '/article';
+      const params = { id: this.id };
 
       var vm = this;
       const loading = vm.$loading({ lock: true });
-      axios.get(url).then(function (res) {
-        if (!res.data)
-          throw 'Invalid Response';
-        if (res.data.err)
-          throw res.data.err;
-
+      axios.get(url, { params }).then(function (res) {
         vm.author = res.data.author;
         vm.timestamp = new Date(res.data.timestamp).toLocaleString();
         vm.img = res.data.img;
@@ -92,9 +88,11 @@
         document.title = vm.title + ' | BUPT Go';
 
         loading.close();
-      }).catch(function (err) {
+      }).catch(function (e) {
         loading.close();
-        vm.$message.err({ message: err, showClose: true });
+        vm.$message.error({
+          message: e.response.data.err, showClose: true
+        });
       });
     }
   }

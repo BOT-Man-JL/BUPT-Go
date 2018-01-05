@@ -121,9 +121,7 @@
     },
     methods: {
       onSubmit() {
-        const loading = this.$loading({
-          lock: true
-        });
+        const loading = this.$loading({ lock: true });
         const router = this.$router;
         const message = this.$message;
 

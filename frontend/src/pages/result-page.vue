@@ -46,16 +46,12 @@
       var vm = this;
       const loading = vm.$loading({ lock: true });
       axios.get(url, { params }).then(function (res) {
-        if (!res.data)
-          throw 'Invalid Response';
-        if (res.data.err)
-          throw res.data.err;
-
+        vm.items = [];
         for (const item of res.data) {
           vm.items.push({
             id: item._id,
             author: item.author,
-            timestamp: item.timestamp,
+            timestamp: new Date(item.timestamp).toLocaleString(),
             title: item.title,
             img: item.img,
             category: item.meta.category,
@@ -64,9 +60,11 @@
         }
 
         loading.close();
-      }).catch(function (err) {
+      }).catch(function (e) {
         loading.close();
-        vm.$message.err({ message: err, showClose: true });
+        vm.$message.error({
+          message: e.response.data.err, showClose: true
+        });
       });
     }
   }
