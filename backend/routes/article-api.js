@@ -6,17 +6,17 @@ const ObjectId = require('mongoose').Types.ObjectId;
 const Article = require('../model/article').model;
 const ArticleMeta = require('../model/article-meta').model;
 
-const errBadModelSave = 'Unable to save this article';
-const errInvalidUserName = 'Invalid user name';
-const errInvalidArticleId = 'Invalid article Id';
-const errInvalidArticleImage = 'Invalid article image';
-const errInvalidArticleMeta = 'Invalid article meta data';
-const errNoArticle = 'No such article';
-const errNoLogin = 'Please login first';
+const errBadModelSave = '无法保存该文章';
+const errInvalidUserName = '无效的用户名';
+const errInvalidArticleId = '无效的文章ID';
+const errInvalidArticleImage = '无效的文章图片';
+const errInvalidArticleMeta = '无效的元数据';
+const errNoArticle = '查询不到此文章';
+const errNoLogin = '未登录！';
 
-const msgCreate = 'Create OK';
-const msgUpdate = 'Update OK';
-const msgDelete = 'Delete OK';
+const msgCreate = '创建成功！';
+const msgUpdate = '更新成功！';
+const msgDelete = '删除成功！';
 
 // Get
 

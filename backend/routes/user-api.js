@@ -4,17 +4,17 @@ const router = express.Router();
 
 const User = require('../model/user').model;
 
-const errInvalidUserNamePass = 'Invalid user name or password';
-const errInvalidAvatar = 'Invalid avatar';
-const errBadLoginAttempt = 'Wrong user name or password';
-const errTakenUserName = 'User name has been taken';
-const errBadModelSave = 'Unable to save user account';
-const errAlreadyLogin = 'Please logout first';
-const errNoLogin = 'Please login first';
+const errInvalidUserNamePass = '无效的用户名或密码';
+const errInvalidAvatar = '无效的头像';
+const errBadLoginAttempt = '错误的用户名或密码';
+const errTakenUserName = '用户名已被占用';
+const errBadModelSave = '无法保存用户账户';
+const errAlreadyLogin = '请先注销';
+const errNoLogin = '请先登录';
 
-const msgLogin = 'Login Done';
-const msgSignup = 'Signup Done';
-const msgLogout = 'Logout Done';
+const msgLogin = '登陆成功！';
+const msgSignup = '注册成功！';
+const msgLogout = '注销成功！';
 
 router.post('/login', function (req, res) {
     const userName = req.signedCookies['userNameSigned'];
