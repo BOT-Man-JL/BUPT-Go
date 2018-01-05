@@ -1,4 +1,4 @@
-<template>
+﻿<template>
     <div class="hello">
     	<el-col :span="10">
         <user-header-component></user-header-component>

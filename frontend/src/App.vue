@@ -1,6 +1,14 @@
-<template>
+﻿<template>
   <div id="app">
-    <router-view/>
+    <el-col :span="7">
+      .
+    </el-col>
+    <el-col :span="10">
+      <router-view />
+    </el-col>
+    <el-col :span="7">
+      .
+    </el-col>
   </div>
 </template>
 
@@ -10,13 +18,11 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
