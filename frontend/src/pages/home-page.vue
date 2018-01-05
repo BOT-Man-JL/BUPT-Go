@@ -1,6 +1,28 @@
 ﻿<template>
   <div>
-    <home-header-component />
+    <el-header style="text-align: center">
+      <el-row type="flex" align="middle" justify="space-around">
+        <el-col :span="4">
+          <div>
+            <router-link :to="{ name:'userPage' }">
+              <i class="el-icon-setting"></i>
+            </router-link>
+          </div>
+        </el-col>
+        <el-col :span="16">
+          <div>
+            <h1>BUPT Go</h1>
+          </div>
+        </el-col>
+        <el-col :span="4">
+          <div>
+            <router-link :to="{ name:'searchPage' }">
+              <i class="el-icon-search"></i>
+            </router-link>
+          </div>
+        </el-col>
+      </el-row>
+    </el-header>
     <article-list-item-component v-for="item in items" :key="item.id" :id="item.id"
                                  :title="item.title" :img="item.img" :author="item.author"
                                  :category="item.category" :area="item.area" />
@@ -8,7 +30,6 @@
 </template>
 
 <script>
-import homeHeaderComponent from './components/home-header-component'
 import articleListItemComponent from './components/article-list-item-component'
 export default {
   name: 'homePage',
@@ -23,7 +44,6 @@ export default {
     };
   },
   components: {
-    homeHeaderComponent,
     articleListItemComponent
   }
 }

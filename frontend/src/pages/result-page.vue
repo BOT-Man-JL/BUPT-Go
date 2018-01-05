@@ -1,20 +1,38 @@
 <template>
-    <div class="hello">
-    <el-col :span="10">
-        <p>result {{$route.params.articleInput}} here</p>
-        <home-header-component></home-header-component>
-    	<div class="content">
-          <!-- list组件展示区，并用v-for来将数据遍历，:xx="xxx" 是用来给子组件传递数据的 -->
-        <article-list-component v-bind="values">
+  <div>
+    <el-header style="text-align: center">
+      <el-row type="flex" align="middle" justify="space-around">
+        <el-col :span="4">
+          <div>
+            <router-link :to="{ name:'userPage' }">
+              <i class="el-icon-setting"></i>
+            </router-link>
+          </div>
+        </el-col>
+        <el-col :span="16">
+          <div>
+            <h1>BUPT Go</h1>
+          </div>
+        </el-col>
+        <el-col :span="4">
+          <div>
+            <router-link :to="{ name:'searchPage' }">
+              <i class="el-icon-search"></i>
+            </router-link>
+          </div>
+        </el-col>
+      </el-row>
+    </el-header>
+    <div class="content">
+      <!-- list组件展示区，并用v-for来将数据遍历，:xx="xxx" 是用来给子组件传递数据的 -->
+      <article-list-component v-bind="values">
         <hr />
-        </article-list-component>
-    	</div>
-	</el-col>
+      </article-list-component>
     </div>
+  </div>
 </template>
 
 <script>
-  import homeHeaderComponent from './components/home-header-component'
   import articleListItemComponent from './components/article-list-item-component'
   export default {
     name: 'resultPage',
@@ -30,7 +48,6 @@
       };
     },
     components: {
-      homeHeaderComponent,
       articleListItemComponent
     }
   }

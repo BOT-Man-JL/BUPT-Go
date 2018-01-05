@@ -1,6 +1,28 @@
 <template>
   <div>
-    <article-header-component />
+    <el-header style="text-align: center">
+      <el-row type="flex" align="middle" justify="space-around">
+        <el-col :span="4">
+          <div>
+            <router-link :to="{ name:'homePage' }">
+              <i class="el-icon-back"></i>
+            </router-link>
+          </div>
+        </el-col>
+        <el-col :span="16">
+          <div>
+            <h1>BUPT Go</h1>
+          </div>
+        </el-col>
+        <el-col :span="4">
+          <div>
+            <router-link :to="{ name:'searchPage' }">
+              <i class="el-icon-search"></i>
+            </router-link>
+          </div>
+        </el-col>
+      </el-row>
+    </el-header>
     <div class="article">
       <img v-bind:src="img" style="width: 100%" />
       <h1>{{ title }}</h1>
@@ -23,17 +45,13 @@
 </template>
 
 <script>
-  import articleHeaderComponent from './components/article-header-component'
   export default {
     name: 'articlePage',
+    props: ['title', 'img', 'author'],
     data() {
       return {
         id: this.$route.query.id
       };
-    },
-    props: ['title', 'img', 'author'],
-    components: {
-      articleHeaderComponent
     },
     created() {
       this.fetchData();
