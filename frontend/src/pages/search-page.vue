@@ -8,7 +8,7 @@
           </router-link>
         </el-col>
         <el-col :span="16">
-          <h1>BUPT Go</h1>
+          <h1>筛选文章</h1>
         </el-col>
         <el-col :span="4">
           <router-link :to="{ name:'searchPage' }">
@@ -18,31 +18,30 @@
       </el-row>
     </el-header>
     <div style="text-align: center">
-      <div>
-        <el-select v-model="category" placeholder="请选择类别">
+      <el-row class="input-row">
+        <el-select style="width:80%" v-model="category" placeholder="请选择类别">
           <el-option v-for="item in categoryOptions"
-                     :key="item.value"
-                     :label="item.label"
-                     :value="item.value">
+                     :key="item"
+                     :label="item"
+                     :value="item">
           </el-option>
         </el-select>
-      </div>
-      <div>
-        <el-select v-model="area" placeholder="请选择地区">
+      </el-row>
+      <el-row class="input-row">
+        <el-select style="width:80%" v-model="area" placeholder="请选择地区">
           <el-option v-for="item in areaOptions"
-                     :key="item.value"
-                     :label="item.label"
-                     :value="item.value">
+                     :key="item"
+                     :label="item"
+                     :value="item">
           </el-option>
         </el-select>
-      </div>
-      <div>
-        <el-date-picker v-model="date"
-                        type="date"
-                        placeholder="选择日期">
+      </el-row>
+      <el-row class="input-row">
+        <el-date-picker style="width:80%" v-model="date"
+                        type="date" placeholder="选择日期">
         </el-date-picker>
-      </div>
-      <div>
+      </el-row>
+      <el-row>
         <router-link :to="{ name:'resultPage', query: { category: category, area: area,
                      date: date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() } }">
           <el-button type="primary">
@@ -50,67 +49,32 @@
             <i class="el-icon-search el-icon--right"></i>
           </el-button>
         </router-link>
-      </div>
+      </el-row>
     </div>
   </div>
 </template>
 
 <script>
+  import options from '../../../common/article-common.json'
   export default {
     name: 'searchPage',
     data() {
       return {
-        categoryOptions: [{
-          value: '选项1',
-          label: '美食'
-        }, {
-          value: '选项2',
-          label: '展览'
-        }, {
-          value: '选项3',
-          label: '娱乐'
-        }, {
-          value: '选项4',
-          label: '锻炼'
-        }, {
-          value: '选项5',
-          label: '景点'
-        }, {
-          value: '选项6',
-          label: '演出'
-        }, {
-          value: '选项7',
-          label: '其他'
-        }],
-        areaOptions: [{
-          value: '选项1',
-          label: '西城区'
-        }, {
-          value: '选项2',
-          label: '东城区'
-        }, {
-          value: '选项3',
-          label: '海淀区'
-        }, {
-          value: '选项4',
-          label: '朝阳区'
-        }, {
-          value: '选项5',
-          label: '昌平区'
-        }, {
-          value: '选项6',
-          label: '石景山区'
-        }, {
-          value: '选项7',
-          label: '其他'
-        }],
+        categoryOptions: options.categoryOptions,
+        areaOptions: options.areaOptions,
         category :'',
         area: '',
         date: new Date()
       }
+    },
+    created() {
+      document.title = '筛选文章 | BUPT Go';
     }
   }
 </script>
 
 <style scoped>
+  .input-row {
+    margin: 10px 0;
+  }
 </style>
