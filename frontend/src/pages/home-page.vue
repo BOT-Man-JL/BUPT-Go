@@ -8,7 +8,7 @@
           </router-link>
         </el-col>
         <el-col :span="16">
-          <h1>BUPT Go</h1>
+          <h1>最新文章</h1>
         </el-col>
         <el-col :span="4">
           <router-link :to="{ name:'searchPage' }">
@@ -22,27 +22,49 @@
 </template>
 
 <script>
-import articleRichItemComponent from './components/article-rich-item-component'
-export default {
-  name: 'homePage',
-  components: {
-    articleRichItemComponent
-  },
-  data() {
-    return {
-      items: []
-    };
-  },
-  created() {
-    document.title = '主页 | BUPT Go';
-    this.items = [
-      { id: 1, title: 'my title1', img: '/static/pics/u14.jpeg', author: 'John', category: '美食', area: '东城区' },
-      { id: 2, title: 'my title2', img: '/static/pics/u11.jpeg', author: 'John', category: '电影', area: '西城区' },
-      { id: 3, title: 'my title3', img: '/static/pics/u19.jpeg', author: 'Jack', category: '展览', area: '朝阳区' },
-      { id: 4, title: 'my title4', img: '/static/pics/u23.jpeg', author: 'Jack', category: '其他', area: '海淀区' },
-    ];
+  import axios from 'axios'
+  import articleRichItemComponent from './components/article-rich-item-component'
+  export default {
+    name: 'homePage',
+    components: {
+      articleRichItemComponent
+    },
+    data() {
+      return {
+        items: []
+      };
+    },
+    mounted() {
+      document.title = '主页 | BUPT Go';
+      const url = '/article/recent';
+
+      var vm = this;
+      const loading = vm.$loading({ lock: true });
+      axios.get(url).then(function (res) {
+        if (!res.data)
+          throw 'Invalid Response';
+        if (res.data.err)
+          throw res.data.err;
+
+        for (const item of res.data) {
+          vm.items.push({
+            id: item._id,
+            author: item.author,
+            timestamp: item.timestamp,
+            title: item.title,
+            img: item.img,
+            category: item.meta.category,
+            area: item.meta.area
+          });
+        }
+
+        loading.close();
+      }).catch(function (err) {
+        loading.close();
+        vm.$message.err({ message: err, showClose: true });
+      });
+    }
   }
-}
 </script>
 
 <style scoped>

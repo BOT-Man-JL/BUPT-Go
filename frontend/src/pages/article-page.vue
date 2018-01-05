@@ -25,46 +25,77 @@
           <el-col :span="9" v-if="timestamp">
             <p>{{ timestamp }}</p>
           </el-col>
-          <el-col :spam="5" align="left" v-if="author">
+          <el-col :span="5" align="left" v-if="author">
             <p>{{ author }}</p>
           </el-col>
-          <el-col :spam="10" align="right">
-          	<el-tag size="mini">{{ category }}</el-tag>
-          	<el-tag size="mini">{{ area }}</el-tag>
+          <el-col :span="10" align="right">
+          	<el-tag size="mini" v-if="category">{{ category }}</el-tag>
+          	<el-tag size="mini" v-if="area">{{ area }}</el-tag>
           </el-col>
         </el-row>
         <el-row type="flex" align="middle" justify="center">
           <el-col :span="6" align="middle" v-if="cost">
-            <p>人均花费：{{ cost }}</p>
+            <span>人均￥：{{ cost }}</span>
           </el-col>
-          <el-col :span="9" align="middle" v-if="contact">
-            <p>联系方式：{{ contact }}</p>
+          <el-col :span="8" align="middle" v-if="contact">
+            <span>联系方式：{{ contact }}</span>
           </el-col>
-          <el-col :span="9" align="middle" v-if="location">
-            <p>地址：{{ location }}</p>
+          <el-col :span="10" align="middle" v-if="location">
+            <span>地址：{{ location }}</span>
           </el-col>
         </el-row>
       </div>
-      <div style="text-indent:2em;">{{ text }}</div>
+      <div style="text-indent:2em; margin: 20px 0">{{ text }}</div>
     </div>
   </div>
 </template>
 
 <script>
+  import axios from 'axios'
   export default {
     name: 'articlePage',
     props: ['id', 'title', 'img', 'author'],
-    created() {
-      if (!this.title)
-        this.title = 'Untitled';
-    	this.timestamp = '2018-01-01';
-    	this.category = "美食";
-    	this.area = "海淀区";
-    	this.cost = '200';
-      	this.contact = '123454566';
-      	this.location = '北京邮电大学';
-      	this.text = "Prop 是单向绑定的：当父组件的属性变化时，将传导给子组件，但是	反过来不会。这是为了防止子组件无意间修改了父组件的状态，来避免	 应用的数据流变得难以理解。另外，每次父组件更新时，子组件的所有 prop 都会更新为最新值。这意味着你不应该在子组件内部改变 prop。如果你这么做了，Vue 会在控制台给出警告。";
-      document.title = this.title + ' | BUPT Go';
+    data() {
+      return {
+        timestamp: null,
+        text: null,
+        category: null,
+        area: null,
+        location: null,
+        contact: null,
+        cost: null
+      };
+    },
+    mounted() {
+      document.title = '文章 | BUPT Go';
+      const url = '/article?id=' + this.id;
+
+      var vm = this;
+      const loading = vm.$loading({ lock: true });
+      axios.get(url).then(function (res) {
+        if (!res.data)
+          throw 'Invalid Response';
+        if (res.data.err)
+          throw res.data.err;
+
+        vm.author = res.data.author;
+        vm.timestamp = new Date(res.data.timestamp).toLocaleString();
+        vm.img = res.data.img;
+        vm.title = res.data.title;
+        vm.text = res.data.text;
+        vm.category = res.data.meta.category;
+        vm.area = res.data.meta.area;
+        vm.location = res.data.meta.location;
+        vm.contact = res.data.meta.contact;
+        vm.cost = res.data.meta.cost;
+
+        document.title = vm.title + ' | BUPT Go';
+
+        loading.close();
+      }).catch(function (err) {
+        loading.close();
+        vm.$message.err({ message: err, showClose: true });
+      });
     }
   }
 </script>
