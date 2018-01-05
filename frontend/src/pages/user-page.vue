@@ -20,8 +20,16 @@
         </el-col>
       </el-row>
     </el-header>
-    <article-thin-item-component v-if="isLogin"
-                                 v-for="item in items" v-bind="item" :key="item.id" />
+    <!-- Is Login -->
+    <div v-if="isLogin">
+      <h2>
+        <img :src="userAvatar"
+             style="width: 64px; height: 64px; border-radius: 32px" />
+        <span>{{ userName + '，欢迎发现更大的世界' }}</span>
+      </h2>
+      <article-thin-item-component v-for="item in items" v-bind="item" :key="item.id" />
+    </div>
+    <!-- Not Login -->
     <div v-if="!isLogin" class="login-inputs">
       <el-row class="input-row">
         <el-input style="width:80%"
@@ -36,6 +44,7 @@
         </el-input>
       </el-row>
     </div>
+    <!-- Login -->
     <div v-if="!isLogin && !inSignupPage">
       <el-row class="input-row">
         <el-button type="primary" style="width:80%">
@@ -47,6 +56,7 @@
         <el-button @click="inSignupPage = true">注册</el-button>
       </el-row>
     </div>
+    <!-- Signup -->
     <div v-if="!isLogin && inSignupPage">
       <el-row class="input-row">
         <el-upload action="/placeholder"
@@ -87,11 +97,14 @@
         var pair = rawCookies[i].trim().split('=');
         cookies[pair[0]] = pair[1];
       }
+
       //cookies['userName'] = 'John';
+      //cookies['userAvatar'] = '/static/pics/u14.jpeg';
 
       return {
         isLogin: cookies['userName'] != null,
         inSignupPage: false,
+        userName: cookies['userName'],
         userAvatar: cookies['userAvatar'],
         name: '',
         pass: '',

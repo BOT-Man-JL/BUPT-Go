@@ -41,10 +41,10 @@
                         type="date" placeholder="选择日期">
         </el-date-picker>
       </el-row>
-      <el-row>
+      <el-row class="input-row">
         <router-link :to="{ name:'resultPage', query: { category: category, area: area,
                      date: date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() } }">
-          <el-button type="primary">
+          <el-button type="primary" style="width:60%">
             搜索
             <i class="el-icon-search el-icon--right"></i>
           </el-button>
