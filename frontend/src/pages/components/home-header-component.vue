@@ -1,5 +1,5 @@
 <template>
-  <el-header class="header">
+  <el-header style="text-align: center">
     <el-row type="flex" align="middle" justify="space-around">
       <el-col :span="4">
         <div>
@@ -31,7 +31,4 @@
 </script>
 
 <style scoped>
-  .header {
-    text-align: center;
-  }
 </style>

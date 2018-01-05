@@ -1,6 +1,6 @@
 ﻿<template>
   <router-link :to="{ name:'articlePage', query: { id: id },
-                      params: { title: title, img: img } }">
+                      params: { title: title, img: img, author: author } }">
     <div class="list-item">
       <el-row type="flex" align="middle" justify="space-around">
         <img v-bind:src="img" style="width: 100%">
@@ -26,7 +26,7 @@
 <script>
   export default {
     name: 'articleListItemComponent',
-    props: ['key', 'title', 'img', 'author', 'category', 'area']
+    props: ['id', 'title', 'img', 'author', 'category', 'area']
   }
 </script>
 
