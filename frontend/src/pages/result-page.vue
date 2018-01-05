@@ -17,22 +17,22 @@
         </el-col>
       </el-row>
     </el-header>
-    <article-list-item-component v-for="item in items" v-bind="item" />
+    <article-rich-item-component v-for="item in items" v-bind="item" :key="item.id" />
   </div>
 </template>
 
 <script>
-  import articleListItemComponent from './components/article-list-item-component'
+  import articleRichItemComponent from './components/article-rich-item-component'
   export default {
     name: 'resultPage',
+    components: {
+      articleRichItemComponent
+    },
     props: ['category', 'area', 'date'],
     data() {
       return {
         items: []
       };
-    },
-    components: {
-      articleListItemComponent
     },
     created() {
       document.title = '搜索结果 | BUPT Go';
@@ -47,7 +47,4 @@
 </script>
 
 <style scoped>
-  a {
-    color: #808080;
-  }
 </style>

@@ -25,7 +25,7 @@
 
 <script>
   export default {
-    name: 'articleListItemComponent',
+    name: 'articleRichItemComponent',
     props: ['id', 'title', 'img', 'author', 'category', 'area']
   }
 </script>
@@ -35,5 +35,10 @@
     box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.16), 0px 2px 10px 0px rgba(0,0,0,0.12);
     padding: 20px 30px;
     margin: 20px 0;
+  }
+
+  a {
+    color: #808080;
+    text-decoration: none;
   }
 </style>

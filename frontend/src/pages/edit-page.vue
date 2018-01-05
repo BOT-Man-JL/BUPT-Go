@@ -18,13 +18,13 @@
       </el-row>
     </el-header>
     <div>
-      <el-row>
+      <el-row class="input-row">
         <el-input size="small"
                   placeholder="请输入攻略的标题"
                   v-model="title">
         </el-input>
       </el-row>
-      <el-row>
+      <el-row class="input-row">
         <el-select style="width: 28%" size="small"
                    v-model="category" placeholder="请选择类别">
           <el-option v-for="item in categoryOptions"
@@ -48,32 +48,32 @@
                         end-placeholder="结束日期">
         </el-date-picker>
       </el-row>
-      <el-row>
+      <el-row class="input-row">
         <el-input size="small"
                   placeholder="请输入联系方式（可选）"
                   v-model="telephone">
         </el-input>
       </el-row>
-      <el-row>
+      <el-row class="input-row">
         <el-input size="small"
                   placeholder="请输入地址（可选）"
                   v-model="address">
         </el-input>
       </el-row>
-      <el-row>
+      <el-row class="input-row">
         <el-input size="small"
                   placeholder="请输入花费（可选）"
                   v-model="cost">
         </el-input>
       </el-row>
-      <el-row>
+      <el-row class="input-row">
         <el-input type="textarea"
                   :autosize="{ minRows: 6, maxRows: 12 }"
                   placeholder="在此处输入内容"
                   v-model="text">
         </el-input>
       </el-row>
-      <el-row>
+      <el-row class="input-row">
         <el-upload action="/placeholder"
                    list-type="picture"
                    :multiple="false"
@@ -85,7 +85,7 @@
           </el-tag>
         </el-upload>
       </el-row>
-      <el-row type="flex" align="middle" justify="space-around">
+      <el-row class="input-row" type="flex" align="middle" justify="space-around">
         <el-col>
           <el-button type="primary" @click="onSubmit">
             提交
@@ -120,15 +120,6 @@
       };
     },
     methods: {
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePictureCardPreview(file) {
-        this.dialogImageUrl = file.url;
-        this.dialogVisible = true;
-      }
-    },
-    methods: {
       onSubmit() {
         const loading = this.$loading({
           lock: true
@@ -138,7 +129,7 @@
 
         setTimeout(function () {
           loading.close();
-          message({ message: 'done', type: 'success' });
+          message({ message: 'done', type: 'success', duration: 1500 });
           router.push({ name: 'userPage' });
         }, 1000);
       },
@@ -155,4 +146,8 @@
 </script>
 
 <style scoped>
+  .input-row {
+    margin: 10px 0;
+    text-align: center;
+  }
 </style>
