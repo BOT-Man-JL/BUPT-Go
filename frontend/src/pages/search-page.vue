@@ -23,14 +23,37 @@
         </el-col>
       </el-row>
     </el-header>
-    <div>
-      <el-select v-model="area" placeholder="请选择地区">
-        <el-option v-for="item in options"
-                   :key="item.value"
-                   :label="item.label"
-                   :value="item.value">
-        </el-option>
-      </el-select>
+    <div style="text-align: center">
+	    <div>
+	      <el-select v-model="area" placeholder="请选择地区">
+	        <el-option v-for="item in areaOptions"
+	                   :key="item.value"
+	                   :label="item.label"
+	                   :value="item.value">
+	        </el-option>
+	      </el-select>
+	    </div>
+	    <div>
+	      <el-select v-model="category" placeholder="请选择类别">
+	        <el-option v-for="item in categoryOptions"
+	                   :key="item.value"
+	                   :label="item.label"
+	                   :value="item.value">
+	        </el-option>
+	      </el-select>
+	    </div>
+	    <div>
+	        <el-date-picker
+			      v-model="date"
+			      type="date"
+			      placeholder="选择日期">
+    		</el-date-picker>
+	    </div>
+	    <div>
+	        <el-button type="primary">搜索
+    		<i class="el-icon-search el-icon--right"></i>
+    		</el-button>
+	    </div>
     </div>
   </div>
 </template>
@@ -40,7 +63,7 @@
     name: 'searchPage',
     data() {
       return {
-        options: [{
+        areaOptions: [{
           value: '选项1',
           label: '西城区'
         }, {
@@ -57,9 +80,36 @@
           label: '昌平区'
         }, {
           value: '选项6',
-          label: '丰台区'
+          label: '石景山区'
+        }, {
+          value: '选项7',
+          label: '其他'
         }],
-        area: ''
+        categoryOptions: [{
+          value: '选项1',
+          label: '美食'
+        }, {
+          value: '选项2',
+          label: '展览'
+        }, {
+          value: '选项3',
+          label: '娱乐'
+        }, {
+          value: '选项4',
+          label: '锻炼'
+        }, {
+          value: '选项5',
+          label: '景点'
+        }, {
+          value: '选项6',
+          label: '演出'
+        }, {
+          value: '选项7',
+          label: '其他'
+        }],
+        area: '',
+        category :'',
+        date: ''
       }
     }
   }
