@@ -37,12 +37,13 @@
     <Compile Include="routes\article-api.js" />
     <Compile Include="routes\user-api.js" />
     <Content Include="package.json" />
-    <Content Include="public\index.html" />
+    <Content Include="public\test\index.html" />
     <Content Include="views\error.ejs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="model\" />
     <Folder Include="public\" />
+    <Folder Include="public\test\" />
     <Folder Include="routes\" />
     <Folder Include="views\" />
   </ItemGroup>
