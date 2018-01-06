@@ -47,7 +47,7 @@
       </div>
     </div>
     <!-- Not Login -->
-    <div v-if="!isLogin">
+    <div v-else>
       <el-row class="input-row">
         <el-input style="width:80%"
                   placeholder="请输入账号"
@@ -218,10 +218,9 @@
       },
       onLogout() {
         const url = '/user/logout';
-        const data = new FormData();
 
         const loading = this.$loading({ lock: true });
-        axios.post(url, data).then((res) => {
+        axios.post(url).then((res) => {
           this.$message({
             message: res.data.msg, showClose: true
           });
