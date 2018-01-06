@@ -5,6 +5,7 @@ const router = express.Router();
 const ObjectId = require('mongoose').Types.ObjectId;
 const Article = require('../model/article').model;
 const ArticleMeta = require('../model/article-meta').model;
+const User = require('../model/user').model;
 
 const errBadModelSave = '无法保存该文章';
 const errInvalidUserName = '无效的用户名';
@@ -31,8 +32,30 @@ router.get('/', function (req, res) {
         if (!doc) {
             return res.status(400).send({ err: errNoArticle });
         }
-        res.send(doc);
 
+        const query = { name: doc.author };
+        User.find(query).then(function (docs) {
+            if (docs.length == 1) {
+                res.send({
+                    author: doc.author,
+                    timestamp: doc.timestamp,
+                    meta: doc.meta,
+                    img: doc.img,
+                    title: doc.title,
+                    text: doc.text,
+                    authorAvatar: docs[0].avatar
+                });
+            }
+            else {
+                res.send(doc);
+            }
+
+        }).catch(function (err) {
+            res.send(doc);
+
+            // ignore this error
+            console.error(err);
+        });
     }).catch(function (err) {
         res.status(500).send({ err });
         console.error(err);
