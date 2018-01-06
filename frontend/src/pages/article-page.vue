@@ -37,20 +37,20 @@
             </p>
           </el-col>
           <el-col :span="8" align="right">
-          	<el-tag size="mini" v-if="category">{{ category }}</el-tag>
-          	<el-tag size="mini" v-if="area">{{ area }}</el-tag>
+            <el-tag size="mini" v-if="category">{{ category }}</el-tag>
+            <el-tag size="mini" v-if="area">{{ area }}</el-tag>
           </el-col>
         </el-row>
-        <el-row type="flex" align="middle" justify="center">
-          <el-col :span="6" align="middle" v-if="cost">
-            <span>人均￥：{{ cost }}</span>
+        <el-row type="flex" align="left" justify="left">
+          <el-col :span="16" align="left" v-if="contact">
+            <span>联系 ☎：{{ contact }}</span>
           </el-col>
-          <el-col :span="8" align="middle" v-if="contact">
-            <span>联系：{{ contact }}</span>
+          <el-col :span="8" align="left" v-if="cost">
+            <span>人均 💰：{{ cost }}</span>
           </el-col>
-          <el-col :span="10" align="middle" v-if="location">
-            <span>地址：{{ location }}</span>
-          </el-col>
+        </el-row>
+        <el-row type="flex" align="left" justify="left" v-if="location">
+          <span>地址 🏚：{{ location }}</span>
         </el-row>
       </div>
       <div style="margin: 20px 0" id="content"></div>
@@ -87,11 +87,11 @@
         this.timestamp = new Date(res.data.timestamp).toLocaleString();
         this.img = res.data.img;
         this.title = res.data.title;
-        this.category = res.data.meta.category;
-        this.area = res.data.meta.area;
-        this.location = res.data.meta.location;
-        this.contact = res.data.meta.contact;
-        this.cost = res.data.meta.cost;
+        this.category = res.data.category;
+        this.area = res.data.area;
+        this.location = res.data.location;
+        this.contact = res.data.contact;
+        this.cost = res.data.cost;
 
         document.getElementById('content').innerHTML =
           marked(res.data.text, { sanitize: true });

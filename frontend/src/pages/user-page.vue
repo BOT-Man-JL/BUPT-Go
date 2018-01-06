@@ -22,11 +22,13 @@
     </el-header>
     <!-- Is Login -->
     <div v-if="isLogin">
-      <el-row type="flex" align="bottom" justify="space-around">
+      <el-row type="flex" align="middle" justify="space-around">
         <el-col :span="20" align="left">
-          <img v-if="userAvatar" :src="userAvatar"
-               style="width: 64px; height: 64px; border-radius: 32px" />
-          <h2>{{ userName }}</h2>
+          <h2>
+            <img v-if="userAvatar" :src="userAvatar"
+                 style="width: 64px; height: 64px; border-radius: 32px" />
+            {{ userName }}
+          </h2>
         </el-col>
         <el-col :span="4" align="right">
           <el-button type="primary" size="small" @click="onLogout">

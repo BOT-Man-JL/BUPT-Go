@@ -61,8 +61,8 @@
             timestamp: new Date(item.timestamp).toLocaleString(),
             title: item.title,
             img: item.img,
-            category: item.meta.category,
-            area: item.meta.area
+            category: item.category,
+            area: item.area
           });
         }
 

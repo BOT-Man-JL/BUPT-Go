@@ -114,17 +114,17 @@
       return {
         categoryOptions: options.categoryOptions,
         areaOptions: options.areaOptions,
+        // article
+        title: '',
+        text: '',
+        file: null,
+        previousImg: null,
         // meta
         category: '',
         area: '',
         location: '',
         contact: '',
-        cost: '',
-        // article
-        title: '',
-        text: '',
-        file: null,
-        previousImg: null
+        cost: ''
       };
     },
     mounted() {
@@ -140,11 +140,11 @@
 
       const loading = this.$loading({ lock: true });
       axios.get(url, { params }).then((res) => {
-        this.category = res.data.meta.category;
-        this.area = res.data.meta.area;
-        this.location = res.data.meta.location;
-        this.contact = res.data.meta.contact;
-        this.cost = res.data.meta.cost;
+        this.category = res.data.category;
+        this.area = res.data.area;
+        this.location = res.data.location;
+        this.contact = res.data.contact;
+        this.cost = res.data.cost;
 
         this.title = res.data.title;
         this.text = res.data.text;
