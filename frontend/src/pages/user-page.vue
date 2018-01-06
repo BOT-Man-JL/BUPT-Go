@@ -26,11 +26,12 @@
         <img :src="userAvatar"
              style="width: 64px; height: 64px; border-radius: 32px" />
         <span>{{ userName }}</span>
-        <el-button type="primary" @click="onLogout">
+        <el-button type="primary" size="small" @click="onLogout">
           注销
         </el-button>
       </h2>
-      <article-thin-item-component v-for="item in items" v-bind="item" :key="item.id" />
+      <article-thin-item-component v-for="item in items" v-bind="item"
+                                   :key="item.id" @remove-item="onRemoveItem" />
     </div>
     <!-- Not Login -->
     <div v-if="!isLogin">
@@ -227,6 +228,9 @@
           this.file = fileList[0].raw;
         else
           this.file = null;
+      },
+      onRemoveItem() {
+        this.checkLogin();
       }
     }
   }

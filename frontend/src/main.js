@@ -62,7 +62,10 @@ new Vue({
             {
                 path: '/edit',
                 name: 'editPage',
-                component: editPage
+                component: editPage,
+                props: (route) => ({
+                    id: route.query.id
+                })
             },
         ]
     })
