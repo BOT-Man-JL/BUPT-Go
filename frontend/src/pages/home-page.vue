@@ -17,7 +17,15 @@
         </el-col>
       </el-row>
     </el-header>
-    <article-rich-item-component v-for="item in items" v-bind="item" :key="item.id" />
+    <div v-if="items.length">
+      <article-rich-item-component v-for="item in items" v-bind="item"
+                                   :key="item.id" />
+    </div>
+    <div v-else style="text-align: center; margin: 40px 0">
+      <p>
+        目前暂时没有文章 😶
+      </p>
+    </div>
   </div>
 </template>
 

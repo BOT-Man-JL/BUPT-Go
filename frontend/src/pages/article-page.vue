@@ -21,14 +21,22 @@
       <img v-bind:src="img" style="width: 100%" />
       <h1>{{ title }}</h1>
       <div>
-        <el-row type="flex" align="middle" justify="center">
-          <el-col :span="9" v-if="timestamp">
-            <p>{{ timestamp }}</p>
+        <el-row type="flex" align="middle" justify="center"
+                style="margin-bottom: 20px">
+          <el-col :span="4" align="left">
+            <img v-if="authorAvatar" :src="authorAvatar"
+                 style="width: 64px; height: 64px; border-radius: 32px" />
           </el-col>
-          <el-col :span="5" align="left" v-if="author">
-            <p>{{ author }}</p>
+          <el-col :span="12" align="left">
+            <p v-if="author">
+              {{ author }}
+              <br />
+              <small v-if="timestamp">
+                {{ timestamp }}
+              </small>
+            </p>
           </el-col>
-          <el-col :span="10" align="right">
+          <el-col :span="8" align="right">
           	<el-tag size="mini" v-if="category">{{ category }}</el-tag>
           	<el-tag size="mini" v-if="area">{{ area }}</el-tag>
           </el-col>
@@ -38,27 +46,28 @@
             <span>人均￥：{{ cost }}</span>
           </el-col>
           <el-col :span="8" align="middle" v-if="contact">
-            <span>联系方式：{{ contact }}</span>
+            <span>联系：{{ contact }}</span>
           </el-col>
           <el-col :span="10" align="middle" v-if="location">
             <span>地址：{{ location }}</span>
           </el-col>
         </el-row>
       </div>
-      <div style="text-indent:2em; margin: 20px 0">{{ text }}</div>
+      <div style="margin: 20px 0" id="content"></div>
     </div>
   </div>
 </template>
 
 <script>
   import axios from 'axios'
+  import marked from 'marked'
   export default {
     name: 'articlePage',
     props: ['id', 'title', 'img', 'author'],
     data() {
       return {
+        authorAvatar: null,
         timestamp: null,
-        text: null,
         category: null,
         area: null,
         location: null,
@@ -74,16 +83,18 @@
       const loading = this.$loading({ lock: true });
       axios.get(url, { params }).then((res) => {
         this.author = res.data.author;
+        this.authorAvatar = res.data.authorAvatar;
         this.timestamp = new Date(res.data.timestamp).toLocaleString();
         this.img = res.data.img;
         this.title = res.data.title;
-        this.text = res.data.text;
         this.category = res.data.meta.category;
         this.area = res.data.meta.area;
         this.location = res.data.meta.location;
         this.contact = res.data.meta.contact;
         this.cost = res.data.meta.cost;
 
+        document.getElementById('content').innerHTML =
+          marked(res.data.text, { sanitize: true });
         document.title = this.title + ' | BUPT Go';
 
         loading.close();

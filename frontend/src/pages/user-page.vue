@@ -22,16 +22,27 @@
     </el-header>
     <!-- Is Login -->
     <div v-if="isLogin">
-      <h2>
-        <img :src="userAvatar"
-             style="width: 64px; height: 64px; border-radius: 32px" />
-        <span>{{ userName }}</span>
-        <el-button type="primary" size="small" @click="onLogout">
-          注销
-        </el-button>
-      </h2>
-      <article-thin-item-component v-for="item in items" v-bind="item"
-                                   :key="item.id" @remove-item="onRemoveItem" />
+      <el-row type="flex" align="bottom" justify="space-around">
+        <el-col :span="20" align="left">
+          <img v-if="userAvatar" :src="userAvatar"
+               style="width: 64px; height: 64px; border-radius: 32px" />
+          <h2>{{ userName }}</h2>
+        </el-col>
+        <el-col :span="4" align="right">
+          <el-button type="primary" size="small" @click="onLogout">
+            注销
+          </el-button>
+        </el-col>
+      </el-row>
+      <div v-if="items.length">
+        <article-thin-item-component v-for="item in items" v-bind="item"
+                                     :key="item.id" @remove-item="onRemoveItem" />
+      </div>
+      <div v-else style="text-align: center; margin: 40px 0">
+        <p>
+          点击右上角，写下属于你的世界 😘
+        </p>
+      </div>
     </div>
     <!-- Not Login -->
     <div v-if="!isLogin">

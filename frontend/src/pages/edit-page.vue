@@ -3,7 +3,7 @@
     <el-header style="text-align: center">
       <el-row type="flex" align="middle" justify="space-around">
         <el-col :span="4">
-          <router-link :to="{ name:'homePage' }">
+          <router-link :to="{ name:'userPage' }">
             <i class="el-icon-back"></i>
           </router-link>
         </el-col>
