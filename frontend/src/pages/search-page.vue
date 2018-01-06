@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div>
     <el-header style="text-align: center">
       <el-row type="flex" align="middle" justify="space-around">
@@ -8,7 +8,7 @@
           </router-link>
         </el-col>
         <el-col :span="16">
-          <h1>筛选文章</h1>
+          <h1>搜索文章</h1>
         </el-col>
         <el-col :span="4">
           <router-link :to="{ name:'searchPage' }">
@@ -19,7 +19,8 @@
     </el-header>
     <div style="text-align: center">
       <el-row class="input-row">
-        <el-select style="width:80%" v-model="category" placeholder="请选择类别">
+        <el-select style="width:85%" @change="onSearch"
+                   v-model="category" placeholder="请选择类别">
           <el-option v-for="item in categoryOptions"
                      :key="item"
                      :label="item"
@@ -28,7 +29,8 @@
         </el-select>
       </el-row>
       <el-row class="input-row">
-        <el-select style="width:80%" v-model="area" placeholder="请选择地区">
+        <el-select style="width:85%" @change="onSearch"
+                   v-model="area" placeholder="请选择地区">
           <el-option v-for="item in areaOptions"
                      :key="item"
                      :label="item"
@@ -36,32 +38,82 @@
           </el-option>
         </el-select>
       </el-row>
-      <el-row class="input-row">
-        <router-link :to="{ name:'resultPage', query: { category: category, area: area } }">
-          <el-button type="primary" style="width:60%">
-            搜索
-            <i class="el-icon-search el-icon--right"></i>
-          </el-button>
-        </router-link>
-      </el-row>
+    </div>
+    <div style="text-align: center; margin: 40px 0" v-if="items.length">
+      <article-rich-item-component v-for="item in items" v-bind="item"
+                                   :key="item.id" />
+    </div>
+    <div style="text-align: center; margin: 40px 0" v-else>
+      <p>
+        没有相关结果 🙄
+      </p>
     </div>
   </div>
 </template>
 
 <script>
+  import axios from 'axios'
+  import articleRichItemComponent from './components/article-rich-item-component'
   import options from '../../../common/article-common.json'
   export default {
     name: 'searchPage',
+    components: {
+      articleRichItemComponent
+    },
     data() {
+      // Ensure only once
+      if (options.categoryOptions[0])
+        options.categoryOptions.unshift('');
+      if (options.areaOptions[0])
+        options.areaOptions.unshift('');
+
       return {
+        // options
         categoryOptions: options.categoryOptions,
         areaOptions: options.areaOptions,
+        // params
         category: '',
-        area: ''
-      }
+        area: '',
+        // result
+        items: []
+      };
     },
     mounted() {
-      document.title = '筛选文章 | BUPT Go';
+      document.title = '搜索文章 | BUPT Go';
+    },
+    methods: {
+      onSearch() {
+        this.items = [];
+        if (!this.category && !this.area) {
+          // not search but clear all options
+          return;
+        }
+
+        const url = '/article/search';
+        const params = {
+          category: this.category,
+          area: this.area
+        };
+
+        axios.get(url, { params }).then((res) => {
+          for (const item of res.data) {
+            this.items.push({
+              id: item._id,
+              author: item.author,
+              timestamp: new Date(item.timestamp).toLocaleString(),
+              title: item.title,
+              img: item.img,
+              category: item.category,
+              area: item.area
+            });
+          }
+
+        }).catch((e) => {
+          this.$message.error({
+            message: e.response.data.err, showClose: true
+          });
+        });
+      }
     }
   }
 </script>
