@@ -129,7 +129,7 @@
         file: null,
         // is login
         userName: cookies['userName'] + '，欢迎发现更大的世界',
-        userAvatar: cookies['userAvatar'],
+        userAvatar: decodeURIComponent(cookies['userAvatar']),
         items: []
       };
     },
@@ -150,13 +150,12 @@
 
         this.isLogin = true;
         this.userName = cookies['userName'] + '，欢迎发现更大的世界';
-        this.userAvatar = cookies['userAvatar'];
+        this.userAvatar = decodeURIComponent(cookies['userAvatar']);
 
         const url = '/article/user';
-        const params = { name: cookies['userName'] };
 
         const loading = this.$loading({ lock: true });
-        axios.get(url, { params }).then((res) => {
+        axios.get(url).then((res) => {
           this.items = [];
           for (const item of res.data) {
             this.items.push({

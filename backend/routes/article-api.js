@@ -6,8 +6,10 @@ const ObjectId = require('mongoose').Types.ObjectId;
 const Article = require('../model/article').model;
 const User = require('../model/user').model;
 
+const richTemplate = require('../model/article').richTemplate;
+const thinTemplate = require('../model/article').thinTemplate;
+
 const errBadModelSave = '无法保存该文章';
-const errInvalidUserName = '无效的用户名';
 const errInvalidArticleId = '无效的文章ID';
 const errInvalidArticleContent = '无效的文章标题/正文';
 const errInvalidArticleMeta = '无效的类别/地区信息';
@@ -19,82 +21,13 @@ const msgCreate = '创建成功！';
 const msgUpdate = '更新成功！';
 const msgDelete = '删除成功！';
 
-// Get
-
-router.get('/', function (req, res) {
-    const id = req.query.id;
-    if (!ObjectId.isValid(id)) {
-        return res.status(400).send({ err: errInvalidArticleId });
-    }
-
-    Article.findById(id).then(function (doc) {
-        if (!doc) {
-            return res.status(400).send({ err: errNoArticle });
-        }
-
-        const query = { name: doc.author };
-        User.find(query).then(function (docs) {
-            if (docs.length == 1) {
-                res.send({
-                    author: doc.author,
-                    timestamp: doc.timestamp,
-                    img: doc.img,
-                    title: doc.title,
-                    text: doc.text,
-                    category: doc.category,
-                    area: doc.area,
-                    location: doc.location,
-                    contact: doc.contact,
-                    cost: doc.cost,
-                    authorAvatar: docs[0].avatar
-                });
-            }
-            else {
-                res.send(doc);
-            }
-
-        }).catch(function (err) {
-            res.send(doc);
-
-            // ignore this error
-            console.error(err);
-        });
-    }).catch(function (err) {
-        res.status(500).send({ err });
-        console.error(err);
-    });
-});
-
-router.get('/user', function (req, res) {
-    const name = req.query.name;
-    if (!name) {
-        return res.status(400).send({ err: errInvalidUserName });
-    }
-
-    const query = { author: name };
-    Article.find(query)
-        .select({ _id: 1, title: 1, timestamp: 1 })
-        .sort({ timestamp: -1 })
-        .then(function (docs) {
-            // Note: (docs.length == 0) is not an error
-            res.send(docs);
-
-        }).catch(function (err) {
-            res.status(500).send({ err });
-            console.error(err);
-        });
-});
+// List Query
 
 router.get('/recent', function (req, res) {
     Article.find()
+        .select(richTemplate)
         .sort({ timestamp: -1 })
-        .select({
-            _id: 1, author: 1, timestamp: 1,
-            title: 1, img: 1,
-            category: 1, area: 1
-        })
         .then(function (docs) {
-            // Note: (docs.length == 0) is not an error
             res.send(docs);
 
         }).catch(function (err) {
@@ -111,14 +44,9 @@ router.get('/search', function (req, res) {
         query.area = req.query.area;
 
     Article.find(query)
-        .select({
-            _id: 1, author: 1, timestamp: 1,
-            title: 1, img: 1,
-            category: 1, area: 1
-        })
+        .select(richTemplate)
         .sort({ timestamp: -1 })
         .then(function (docs) {
-            // Note: (docs.length == 0) is not an error
             res.send(docs);
 
         }).catch(function (err) {
@@ -127,7 +55,68 @@ router.get('/search', function (req, res) {
         });
 });
 
-// Post
+router.get('/user', function (req, res) {
+    const userName = req.signedCookies['userNameSigned'];
+    if (!userName) {
+        return res.status(401).send({ err: errNoLogin });
+    }
+
+    const query = { author: userName };
+    Article.find(query)
+        .select(thinTemplate)
+        .sort({ timestamp: -1 })
+        .then(function (docs) {
+            res.send(docs);
+
+        }).catch(function (err) {
+            res.status(500).send({ err });
+            console.error(err);
+        });
+});
+
+// Item Query/Post/Delete
+
+router.get('/', function (req, res) {
+    const id = req.query.id;
+    if (!ObjectId.isValid(id)) {
+        return res.status(400).send({ err: errInvalidArticleId });
+    }
+
+    Article.findById(id).then(function (doc) {
+        if (!doc) {
+            return res.status(400).send({ err: errNoArticle });
+        }
+
+        const query = { name: doc.author };
+        User.find(query).then(function (docs) {
+            if (docs.length == 1) {
+                return res.send({
+                    author: doc.author,
+                    timestamp: doc.timestamp,
+                    img: doc.img,
+                    title: doc.title,
+                    text: doc.text,
+                    category: doc.category,
+                    area: doc.area,
+                    location: doc.location,
+                    contact: doc.contact,
+                    cost: doc.cost,
+                    authorAvatar: docs[0].avatar
+                });
+            }
+            res.send(doc);
+
+        }).catch(function (err) {
+            res.send(doc);
+
+            // ignore this error
+            console.error(err);
+        });
+    }).catch(function (err) {
+        res.status(500).send({ err });
+        console.error(err);
+    });
+});
 
 router.post('/submit', function (req, res) {
     const userName = req.signedCookies['userNameSigned'];

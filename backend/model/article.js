@@ -44,3 +44,12 @@ const schema = new Schema({
 
 exports.schema = schema;
 exports.model = mongoose.model('Article', schema);
+
+exports.richTemplate = {
+    _id: 1, author: 1, timestamp: 1,
+    title: 1, img: 1,
+    category: 1, area: 1
+};
+exports.thinTemplate = {
+    _id: 1, title: 1, timestamp: 1
+};
