@@ -38,12 +38,11 @@
       document.title = '主页 | BUPT Go';
       const url = '/article/recent';
 
-      var vm = this;
-      const loading = vm.$loading({ lock: true });
-      axios.get(url).then(function (res) {
-        vm.items = [];
+      const loading = this.$loading({ lock: true });
+      axios.get(url).then((res) => {
+        this.items = [];
         for (const item of res.data) {
-          vm.items.push({
+          this.items.push({
             id: item._id,
             author: item.author,
             timestamp: new Date(item.timestamp).toLocaleString(),
@@ -55,9 +54,9 @@
         }
 
         loading.close();
-      }).catch(function (e) {
+      }).catch((e) => {
         loading.close();
-        vm.$message.error({
+        this.$message.error({
           message: e.response.data.err, showClose: true
         });
       });

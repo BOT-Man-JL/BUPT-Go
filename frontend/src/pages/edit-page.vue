@@ -8,7 +8,7 @@
           </router-link>
         </el-col>
         <el-col :span="16">
-          <h1>BUPT Go</h1>
+          <h1>编辑文章</h1>
         </el-col>
         <el-col :span="4">
           <router-link :to="{ name:'searchPage' }">
@@ -20,12 +20,12 @@
     <div>
       <el-row class="input-row">
         <el-input size="small"
-                  placeholder="请输入攻略的标题"
+                  placeholder="文章的标题"
                   v-model="title">
         </el-input>
       </el-row>
       <el-row class="input-row">
-        <el-select style="width: 28%" size="small"
+        <el-select style="width: 49%" size="small"
                    v-model="category" placeholder="请选择类别">
           <el-option v-for="item in categoryOptions"
                      :key="item"
@@ -33,7 +33,7 @@
                      :value="item">
           </el-option>
         </el-select>
-        <el-select style="width: 28%" size="small"
+        <el-select style="width: 49%" size="small"
                    v-model="area" placeholder="请选择地区">
           <el-option v-for="item in areaOptions"
                      :key="item"
@@ -41,29 +41,21 @@
                      :value="item">
           </el-option>
         </el-select>
-        <el-date-picker style="width: 42%" size="small"
-                        v-model="date" type="daterange"
-                        start-placeholder="开始日期"
-                        range-separator="至"
-                        end-placeholder="结束日期">
-        </el-date-picker>
       </el-row>
       <el-row class="input-row">
-        <el-input size="small"
-                  placeholder="请输入联系方式（可选）"
-                  v-model="telephone">
+        <el-input size="small" style="width: 69%"
+                  placeholder="联系方式（可选）"
+                  v-model="contact">
         </el-input>
-      </el-row>
-      <el-row class="input-row">
-        <el-input size="small"
-                  placeholder="请输入地址（可选）"
-                  v-model="address">
-        </el-input>
-      </el-row>
-      <el-row class="input-row">
-        <el-input size="small"
-                  placeholder="请输入花费（可选）"
+        <el-input size="small" style="width: 29%"
+                  placeholder="人均花费￥（可选）"
                   v-model="cost">
+        </el-input>
+      </el-row>
+      <el-row class="input-row">
+        <el-input size="small"
+                  placeholder="详细地址（可选）"
+                  v-model="location">
         </el-input>
       </el-row>
       <el-row class="input-row">
@@ -73,66 +65,150 @@
                   v-model="text">
         </el-input>
       </el-row>
+      <el-row class="input-row" v-if="previousImg">
+        <img :src="previousImg" style="width: 80%" />
+      </el-row>
       <el-row class="input-row">
         <el-upload action="/placeholder"
                    list-type="picture"
                    :multiple="false"
                    :on-change="onSelectImage"
                    :auto-upload="false">
-          <el-tag>
+          <el-tag v-if="id">
+            更新图片
+            <i class="el-icon-plus"></i>
+          </el-tag>
+          <el-tag v-else>
             上传图片
             <i class="el-icon-plus"></i>
           </el-tag>
         </el-upload>
       </el-row>
-      <el-row class="input-row" type="flex" align="middle" justify="space-around">
-        <el-col>
-          <el-button type="primary" @click="onSubmit">
-            提交
-            <i class="el-icon-success el-icon--right"></i>
-          </el-button>
-        </el-col>
-        <el-col>
-          <el-button @click="onDelete">
-            删除
-            <i class="el-icon-delete el-icon--right"></i>
-          </el-button>
-        </el-col>
+      <el-row class="input-row" type="flex" align="middle" justify="space-around" v-if="id">
+        <el-button @click="onSubmit" style="width: 40%" type="primary">
+          提交
+          <i class="el-icon-success el-icon--right"></i>
+        </el-button>
+        <el-button @click="onDelete" style="width: 40%">
+          删除
+          <i class="el-icon-delete el-icon--right"></i>
+        </el-button>
+      </el-row>
+      <el-row class="input-row" type="flex" align="middle" justify="space-around" v-else>
+        <el-button @click="onSubmit" style="width: 80%" type="primary">
+          提交
+          <i class="el-icon-success el-icon--right"></i>
+        </el-button>
       </el-row>
     </div>
   </div>
 </template>
 
 <script>
+  import axios from 'axios'
   import options from '../../../common/article-common.json'
   export default {
     name: 'editPage',
+    props: ['id'],
     data() {
       return {
         categoryOptions: options.categoryOptions,
         areaOptions: options.areaOptions,
+        // meta
+        category: '',
+        area: '',
+        location: '',
+        contact: '',
+        cost: '',
+        // article
         title: '',
-        telephone: '',
-        address: '',
         text: '',
-        dateRange: null,
-        file: null
+        file: null,
+        previousImg: null
       };
+    },
+    mounted() {
+      document.title = '编辑文章 | BUPT Go';
+      if (!this.id) {
+        // Create Mode
+        return;
+      }
+
+      // Edit Mode
+      const url = '/article';
+      const params = { id: this.id };
+
+      const loading = this.$loading({ lock: true });
+      axios.get(url, { params }).then((res) => {
+        this.category = res.data.meta.category;
+        this.area = res.data.meta.area;
+        this.location = res.data.meta.location;
+        this.contact = res.data.meta.contact;
+        this.cost = res.data.meta.cost;
+
+        this.title = res.data.title;
+        this.text = res.data.text;
+        this.previousImg = res.data.img;
+
+        loading.close();
+      }).catch((e) => {
+        loading.close();
+        this.$message.error({
+          message: e.response.data.err, showClose: true
+        });
+      });
     },
     methods: {
       onSubmit() {
-        const loading = this.$loading({ lock: true });
-        const router = this.$router;
-        const message = this.$message;
+        const url = '/article/submit';
+        const data = new FormData();
+        if (this.id) {
+          data.append('id', this.id);
+        }
+        data.append('category', this.category);
+        data.append('area', this.area);
+        data.append('location', this.location);
+        data.append('contact', this.contact);
+        data.append('cost', this.cost);
 
-        setTimeout(function () {
+        data.append('title', this.title);
+        data.append('text', this.text);
+        data.append('image', this.file);
+
+        const loading = this.$loading({ lock: true });
+        axios.post(url, data).then((res) => {
+          this.$message({
+            message: res.data.msg, showClose: true
+          });
+          this.$router.push({ name: 'userPage' });
+
           loading.close();
-          message({ message: 'done', type: 'success', duration: 1500, showClose: true });
-          router.push({ name: 'userPage' });
-        }, 1000);
+        }).catch((e) => {
+          loading.close();
+          this.$message.error({
+            message: e.response.data.err, showClose: true
+          });
+        });
       },
       onDelete() {
+        const url = '/article/delete';
+        const data = new FormData();
+        data.append('id', this.id);
 
+        const loading = this.$loading({ lock: true });
+        axios.post(url, data).then((res) => {
+          this.$message({
+            message: res.data.msg, showClose: true
+          });
+          this.$router.push({ name: 'userPage' });
+
+          loading.close();
+        }).catch((e) => {
+          loading.close();
+          this.$message.error({
+            message: e.response.data.err, showClose: true
+          });
+        });
       },
       onSelectImage(file, fileList) {
         if (fileList && fileList[0])

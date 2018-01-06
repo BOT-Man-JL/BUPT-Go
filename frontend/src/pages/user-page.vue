@@ -25,15 +25,16 @@
       <h2>
         <img :src="userAvatar"
              style="width: 64px; height: 64px; border-radius: 32px" />
-        <span>{{ userName + '，欢迎发现更大的世界' }}</span>
-        <el-button type="primary" @click="onLogout">
+        <span>{{ userName }}</span>
+        <el-button type="primary" size="small" @click="onLogout">
           注销
         </el-button>
       </h2>
-      <article-thin-item-component v-for="item in items" v-bind="item" :key="item.id" />
+      <article-thin-item-component v-for="item in items" v-bind="item"
+                                   :key="item.id" @remove-item="onRemoveItem" />
     </div>
     <!-- Not Login -->
-    <div v-if="!isLogin" class="login-inputs">
+    <div v-if="!isLogin">
       <el-row class="input-row">
         <el-input style="width:80%"
                   placeholder="请输入账号"
@@ -46,42 +47,41 @@
                   v-model="pass">
         </el-input>
       </el-row>
-    </div>
-    <!-- Login -->
-    <div v-if="!isLogin && !inSignupPage">
-      <el-row class="input-row">
-        <el-button type="primary" style="width:80%" @click="onLogin">
-          登录
-        </el-button>
-      </el-row>
-      <el-row class="input-row">
-        <span>没有账号？</span>
-        <el-button @click="inSignupPage = true">注册</el-button>
-      </el-row>
-    </div>
-    <!-- Signup -->
-    <div v-if="!isLogin && inSignupPage">
-      <el-row class="input-row">
-        <el-upload action="/placeholder"
-                   list-type="picture"
-                   :multiple="false"
-                   :on-change="onSelectImage"
-                   :auto-upload="false">
-          <el-tag>
-            上传头像
-            <i class="el-icon-plus"></i>
-          </el-tag>
-        </el-upload>
-      </el-row>
-      <el-row class="input-row">
-        <el-button type="primary" style="width:80%" @click="onSignup">
-          注册
-        </el-button>
-      </el-row>
-      <el-row class="input-row">
-        <span>已有账号？</span>
-        <el-button @click="inSignupPage = false">登录</el-button>
-      </el-row>
+      <!-- Login / Signup -->
+      <div v-if="!inSignupPage">
+        <el-row class="input-row">
+          <el-button type="primary" style="width:80%" @click="onLogin">
+            登录
+          </el-button>
+        </el-row>
+        <el-row class="input-row">
+          <span>没有账号？</span>
+          <el-button @click="inSignupPage = true">注册</el-button>
+        </el-row>
+      </div>
+      <div v-else>
+        <el-row class="input-row">
+          <el-upload action="/placeholder"
+                     list-type="picture"
+                     :multiple="false"
+                     :on-change="onSelectImage"
+                     :auto-upload="false">
+            <el-tag>
+              上传头像
+              <i class="el-icon-plus"></i>
+            </el-tag>
+          </el-upload>
+        </el-row>
+        <el-row class="input-row">
+          <el-button type="primary" style="width:80%" @click="onSignup">
+            注册
+          </el-button>
+        </el-row>
+        <el-row class="input-row">
+          <span>已有账号？</span>
+          <el-button @click="inSignupPage = false">登录</el-button>
+        </el-row>
+      </div>
     </div>
   </div>
 </template>
@@ -115,7 +115,7 @@
         pass: '',
         file: null,
         // is login
-        userName: cookies['userName'],
+        userName: cookies['userName'] + '，欢迎发现更大的世界',
         userAvatar: cookies['userAvatar'],
         items: []
       };
@@ -129,19 +129,24 @@
         var cookies = getCookies();
         if (!cookies['userName']) {
           this.isLogin = false;
+          this.name = '';
+          this.pass = '';
+          this.file = '';
           return;
         }
+
         this.isLogin = true;
+        this.userName = cookies['userName'] + '，欢迎发现更大的世界';
+        this.userAvatar = cookies['userAvatar'];
 
         const url = '/article/user';
         const params = { name: cookies['userName'] };
 
-        var vm = this;
-        const loading = vm.$loading({ lock: true });
-        axios.get(url, { params }).then(function (res) {
-          vm.items = [];
+        const loading = this.$loading({ lock: true });
+        axios.get(url, { params }).then((res) => {
+          this.items = [];
           for (const item of res.data) {
-            vm.items.push({
+            this.items.push({
               id: item._id,
               timestamp: new Date(item.timestamp).toLocaleString(),
               title: item.title
@@ -149,9 +154,9 @@
           }
 
           loading.close();
-        }).catch(function (e) {
+        }).catch((e) => {
           loading.close();
-          vm.$message.error({
+          this.$message.error({
             message: e.response.data.err, showClose: true
           });
         });
@@ -162,18 +167,17 @@
         data.append('name', this.name);
         data.append('pass', this.pass);
 
-        var vm = this;
-        const loading = vm.$loading({ lock: true });
-        axios.post(url, data).then(function (res) {
-          vm.$message({
+        const loading = this.$loading({ lock: true });
+        axios.post(url, data).then((res) => {
+          this.$message({
             message: res.data.msg, showClose: true
           });
-          vm.checkLogin();
+          this.checkLogin();
 
           loading.close();
-        }).catch(function (e) {
+        }).catch((e) => {
           loading.close();
-          vm.$message.error({
+          this.$message.error({
             message: e.response.data.err, showClose: true
           });
         });
@@ -185,18 +189,17 @@
         data.append('pass', this.pass);
         data.append('image', this.file);
 
-        var vm = this;
-        const loading = vm.$loading({ lock: true });
-        axios.post(url, data).then(function (res) {
-          vm.$message({
+        const loading = this.$loading({ lock: true });
+        axios.post(url, data).then((res) => {
+          this.$message({
             message: res.data.msg, showClose: true
           });
-          vm.checkLogin();
+          this.checkLogin();
 
           loading.close();
-        }).catch(function (e) {
+        }).catch((e) => {
           loading.close();
-          vm.$message.error({
+          this.$message.error({
             message: e.response.data.err, showClose: true
           });
         });
@@ -205,18 +208,17 @@
         const url = '/user/logout';
         const data = new FormData();
 
-        var vm = this;
-        const loading = vm.$loading({ lock: true });
-        axios.post(url, data).then(function (res) {
-          vm.$message({
+        const loading = this.$loading({ lock: true });
+        axios.post(url, data).then((res) => {
+          this.$message({
             message: res.data.msg, showClose: true
           });
-          vm.checkLogin();
+          this.checkLogin();
 
           loading.close();
-        }).catch(function (e) {
+        }).catch((e) => {
           loading.close();
-          vm.$message.error({
+          this.$message.error({
             message: e.response.data.err, showClose: true
           });
         });
@@ -226,6 +228,9 @@
           this.file = fileList[0].raw;
         else
           this.file = null;
+      },
+      onRemoveItem() {
+        this.checkLogin();
       }
     }
   }

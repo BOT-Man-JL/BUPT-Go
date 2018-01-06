@@ -20,12 +20,30 @@
 </template>
 
 <script>
+  import axios from 'axios'
   export default {
     name: 'articleThinItemComponent',
     props: ['id', 'title', 'timestamp'],
     methods: {
       onDelete() {
-        alert(id);
+        const url = '/article/delete';
+        const data = new FormData();
+        data.append('id', this.id);
+
+        const loading = this.$loading({ lock: true });
+        axios.post(url, data).then((res) => {
+          this.$message({
+            message: res.data.msg, showClose: true
+          });
+          this.$emit('remove-item');
+
+          loading.close();
+        }).catch((e) => {
+          loading.close();
+          this.$message.error({
+            message: e.response.data.err, showClose: true
+          });
+        });
       }
     }
   }
