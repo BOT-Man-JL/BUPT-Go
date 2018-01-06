@@ -10,7 +10,8 @@ const errBadModelSave = '无法保存该文章';
 const errInvalidUserName = '无效的用户名';
 const errInvalidArticleId = '无效的文章ID';
 const errInvalidArticleImage = '无效的文章图片';
-const errInvalidArticleMeta = '无效的元数据';
+const errInvalidArticleMeta = '无效的类别/地区信息';
+const errInvalidArticleContent = '无效的文章标题/正文';
 const errNoArticle = '查询不到此文章';
 const errNoLogin = '未登录！';
 
@@ -111,9 +112,9 @@ router.post('/submit', function (req, res) {
     const articleMeta = {
         category: req.body.category,
         area: req.body.area,
-        location: req.body.location,
-        contact: req.body.contact,
-        cost: req.body.cost
+        location: req.body.location || '',
+        contact: req.body.contact || '',
+        cost: req.body.cost || ''
     };
 
     if (!articleMeta.category || !articleMeta.area) {
@@ -128,6 +129,10 @@ router.post('/submit', function (req, res) {
         title: req.body.title,
         text: req.body.text
     };
+
+    if (!article.title || !article.text) {
+        return res.status(400).send({ err: errInvalidArticleContent });
+    }
 
     if (id) {
         if (!article.img) {
