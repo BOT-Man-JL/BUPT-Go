@@ -4,15 +4,14 @@ const router = express.Router();
 
 const ObjectId = require('mongoose').Types.ObjectId;
 const Article = require('../model/article').model;
-const ArticleMeta = require('../model/article-meta').model;
 const User = require('../model/user').model;
 
 const errBadModelSave = '无法保存该文章';
 const errInvalidUserName = '无效的用户名';
 const errInvalidArticleId = '无效的文章ID';
-const errInvalidArticleImage = '无效的文章图片';
-const errInvalidArticleMeta = '无效的类别/地区信息';
 const errInvalidArticleContent = '无效的文章标题/正文';
+const errInvalidArticleMeta = '无效的类别/地区信息';
+const errInvalidArticleImage = '无效的文章图片';
 const errNoArticle = '查询不到此文章';
 const errNoLogin = '未登录！';
 
@@ -39,10 +38,14 @@ router.get('/', function (req, res) {
                 res.send({
                     author: doc.author,
                     timestamp: doc.timestamp,
-                    meta: doc.meta,
                     img: doc.img,
                     title: doc.title,
                     text: doc.text,
+                    category: doc.category,
+                    area: doc.area,
+                    location: doc.location,
+                    contact: doc.contact,
+                    cost: doc.cost,
                     authorAvatar: docs[0].avatar
                 });
             }
@@ -85,7 +88,11 @@ router.get('/user', function (req, res) {
 router.get('/recent', function (req, res) {
     Article.find()
         .sort({ timestamp: -1 })
-        .select({ _id: 1, author: 1, timestamp: 1, meta: 1, title: 1, img: 1 })
+        .select({
+            _id: 1, author: 1, timestamp: 1,
+            title: 1, img: 1,
+            category: 1, area: 1
+        })
         .then(function (docs) {
             // Note: (docs.length == 0) is not an error
             res.send(docs);
@@ -104,7 +111,12 @@ router.get('/search', function (req, res) {
         query.area = req.query.area;
 
     Article.find(query)
-        .select({ _id: 1, author: 1, timestamp: 1, meta: 1, title: 1, img: 1 })
+        .select({
+            _id: 1, author: 1, timestamp: 1,
+            title: 1, img: 1,
+            category: 1, area: 1
+        })
+        .sort({ timestamp: -1 })
         .then(function (docs) {
             // Note: (docs.length == 0) is not an error
             res.send(docs);
@@ -132,7 +144,12 @@ router.post('/submit', function (req, res) {
         return res.status(400).send({ err: errInvalidArticleImage });
     }
 
-    const articleMeta = {
+    const article = {
+        author: userName,
+        timestamp: new Date(),
+        img: req.file ? req.file.filename : null,
+        title: req.body.title,
+        text: req.body.text,
         category: req.body.category,
         area: req.body.area,
         location: req.body.location || '',
@@ -140,21 +157,12 @@ router.post('/submit', function (req, res) {
         cost: req.body.cost || ''
     };
 
-    if (!articleMeta.category || !articleMeta.area) {
-        return res.status(400).send({ err: errInvalidArticleMeta });
-    }
-
-    const article = {
-        author: userName,
-        timestamp: new Date(),
-        meta: new ArticleMeta(articleMeta),
-        img: req.file ? req.file.filename : null,
-        title: req.body.title,
-        text: req.body.text
-    };
-
     if (!article.title || !article.text) {
         return res.status(400).send({ err: errInvalidArticleContent });
+    }
+
+    if (!article.category || !article.area) {
+        return res.status(400).send({ err: errInvalidArticleMeta });
     }
 
     if (id) {

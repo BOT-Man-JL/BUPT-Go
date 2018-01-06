@@ -1,6 +1,6 @@
 ﻿'use strict';
 const mongoose = require('mongoose');
-const ArticleMeta = require('./article-meta');
+const options = require('../../common/article-common.json');
 
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
@@ -12,10 +12,6 @@ const schema = new Schema({
     },
     timestamp: {
         type: Date,
-        required: true
-    },
-    meta: {
-        type: ArticleMeta.schema,
         required: true
     },
     img: {
@@ -30,7 +26,20 @@ const schema = new Schema({
     text: {
         type: String,
         required: true
-    }
+    },
+    category: {
+        type: String,
+        required: true,
+        enum: options.categoryOptions
+    },
+    area: {
+        type: String,
+        required: true,
+        enum: options.areaOptions
+    },
+    location: String,
+    contact: String,
+    cost: String
 });
 
 exports.schema = schema;
