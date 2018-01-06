@@ -71,26 +71,25 @@
       const url = '/article';
       const params = { id: this.id };
 
-      var vm = this;
-      const loading = vm.$loading({ lock: true });
-      axios.get(url, { params }).then(function (res) {
-        vm.author = res.data.author;
-        vm.timestamp = new Date(res.data.timestamp).toLocaleString();
-        vm.img = res.data.img;
-        vm.title = res.data.title;
-        vm.text = res.data.text;
-        vm.category = res.data.meta.category;
-        vm.area = res.data.meta.area;
-        vm.location = res.data.meta.location;
-        vm.contact = res.data.meta.contact;
-        vm.cost = res.data.meta.cost;
+      const loading = this.$loading({ lock: true });
+      axios.get(url, { params }).then((res) => {
+        this.author = res.data.author;
+        this.timestamp = new Date(res.data.timestamp).toLocaleString();
+        this.img = res.data.img;
+        this.title = res.data.title;
+        this.text = res.data.text;
+        this.category = res.data.meta.category;
+        this.area = res.data.meta.area;
+        this.location = res.data.meta.location;
+        this.contact = res.data.meta.contact;
+        this.cost = res.data.meta.cost;
 
-        document.title = vm.title + ' | BUPT Go';
+        document.title = this.title + ' | BUPT Go';
 
         loading.close();
-      }).catch(function (e) {
+      }).catch((e) => {
         loading.close();
-        vm.$message.error({
+        this.$message.error({
           message: e.response.data.err, showClose: true
         });
       });
