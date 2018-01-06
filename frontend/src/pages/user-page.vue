@@ -33,7 +33,7 @@
       <article-thin-item-component v-for="item in items" v-bind="item" :key="item.id" />
     </div>
     <!-- Not Login -->
-    <div v-if="!isLogin" class="login-inputs">
+    <div v-if="!isLogin">
       <el-row class="input-row">
         <el-input style="width:80%"
                   placeholder="请输入账号"
@@ -46,42 +46,41 @@
                   v-model="pass">
         </el-input>
       </el-row>
-    </div>
-    <!-- Login -->
-    <div v-if="!isLogin && !inSignupPage">
-      <el-row class="input-row">
-        <el-button type="primary" style="width:80%" @click="onLogin">
-          登录
-        </el-button>
-      </el-row>
-      <el-row class="input-row">
-        <span>没有账号？</span>
-        <el-button @click="inSignupPage = true">注册</el-button>
-      </el-row>
-    </div>
-    <!-- Signup -->
-    <div v-if="!isLogin && inSignupPage">
-      <el-row class="input-row">
-        <el-upload action="/placeholder"
-                   list-type="picture"
-                   :multiple="false"
-                   :on-change="onSelectImage"
-                   :auto-upload="false">
-          <el-tag>
-            上传头像
-            <i class="el-icon-plus"></i>
-          </el-tag>
-        </el-upload>
-      </el-row>
-      <el-row class="input-row">
-        <el-button type="primary" style="width:80%" @click="onSignup">
-          注册
-        </el-button>
-      </el-row>
-      <el-row class="input-row">
-        <span>已有账号？</span>
-        <el-button @click="inSignupPage = false">登录</el-button>
-      </el-row>
+      <!-- Login / Signup -->
+      <div v-if="!inSignupPage">
+        <el-row class="input-row">
+          <el-button type="primary" style="width:80%" @click="onLogin">
+            登录
+          </el-button>
+        </el-row>
+        <el-row class="input-row">
+          <span>没有账号？</span>
+          <el-button @click="inSignupPage = true">注册</el-button>
+        </el-row>
+      </div>
+      <div v-else>
+        <el-row class="input-row">
+          <el-upload action="/placeholder"
+                     list-type="picture"
+                     :multiple="false"
+                     :on-change="onSelectImage"
+                     :auto-upload="false">
+            <el-tag>
+              上传头像
+              <i class="el-icon-plus"></i>
+            </el-tag>
+          </el-upload>
+        </el-row>
+        <el-row class="input-row">
+          <el-button type="primary" style="width:80%" @click="onSignup">
+            注册
+          </el-button>
+        </el-row>
+        <el-row class="input-row">
+          <span>已有账号？</span>
+          <el-button @click="inSignupPage = false">登录</el-button>
+        </el-row>
+      </div>
     </div>
   </div>
 </template>
