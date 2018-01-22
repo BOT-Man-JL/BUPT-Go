@@ -4,7 +4,9 @@
       <el-row type="flex" align="middle" justify="space-around">
         <el-col :span="4">
           <router-link :to="{ name:'userPage' }">
-            <i class="el-icon-menu"></i>
+            <img v-if="userAvatar" :src="userAvatar"
+                 style="width: 24px; height: 24px; border-radius: 12px" />
+            <i v-else class="el-icon-menu"></i>
           </router-link>
         </el-col>
         <el-col :span="16">
@@ -31,14 +33,19 @@
 
 <script>
   import axios from 'axios'
+  import ajaxPrompt from './helpers/ajax-helper'
+  import getCookies from './helpers/cookie-helper'
   import articleRichItemComponent from './components/article-rich-item-component'
+
   export default {
     name: 'homePage',
     components: {
       articleRichItemComponent
     },
     data() {
+      var cookies = getCookies();
       return {
+        userAvatar: cookies['userAvatar'] ? decodeURIComponent(cookies['userAvatar']) : null,
         items: []
       };
     },
@@ -46,10 +53,9 @@
       document.title = '主页 | BUPT Go';
       const url = '/article/recent';
 
-      const loading = this.$loading({ lock: true });
-      axios.get(url).then((res) => {
+      ajaxPrompt(this, axios.get(url), (res) => {
         this.items = [];
-        for (const item of res.data) {
+        for (const item of res) {
           this.items.push({
             id: item._id,
             author: item.author,
@@ -60,13 +66,6 @@
             area: item.area
           });
         }
-
-        loading.close();
-      }).catch((e) => {
-        loading.close();
-        this.$message.error({
-          message: e.response.data.err, showClose: true
-        });
       });
     }
   }

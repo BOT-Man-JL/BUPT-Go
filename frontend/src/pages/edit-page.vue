@@ -8,7 +8,8 @@
           </router-link>
         </el-col>
         <el-col :span="16">
-          <h1>编辑文章</h1>
+          <h1 v-if="id">编辑文章</h1>
+          <h1 v-else>创建文章</h1>
         </el-col>
         <el-col :span="4">
           <router-link :to="{ name:'searchPage' }">
@@ -68,21 +69,9 @@
       <el-row class="input-row" v-if="previousImg">
         <img :src="previousImg" style="width: 80%" />
       </el-row>
-      <el-row class="input-row">
-        <el-upload action="/placeholder"
-                   list-type="picture"
-                   :multiple="false"
-                   :on-change="onSelectImage"
-                   :auto-upload="false">
-          <el-tag v-if="id">
-            更新图片
-            <i class="el-icon-plus"></i>
-          </el-tag>
-          <el-tag v-else>
-            上传图片
-            <i class="el-icon-plus"></i>
-          </el-tag>
-        </el-upload>
+      <el-row class="input-row" style="margin: 10px 20%" justify="center">
+        <upload-component v-if="id" text="更新图片" v-model="file" />
+        <upload-component v-else text="上传图片" v-model="file" />
       </el-row>
       <el-row class="input-row" type="flex" align="middle" justify="space-around" v-if="id">
         <el-button @click="onSubmit" style="width: 40%" type="primary">
@@ -106,9 +95,15 @@
 
 <script>
   import axios from 'axios'
+  import ajaxPrompt from './helpers/ajax-helper'
   import options from '../../../common/article-common.json'
+  import uploadComponent from './components/upload-component'
+
   export default {
     name: 'editPage',
+    components: {
+      uploadComponent
+    },
     props: ['id'],
     data() {
       return {
@@ -128,37 +123,38 @@
       };
     },
     mounted() {
-      document.title = '编辑文章 | BUPT Go';
       if (!this.id) {
         // Create Mode
+        document.title = '创建文章 | BUPT Go';
         return;
       }
 
       // Edit Mode
+      document.title = '编辑文章 | BUPT Go';
       const url = '/article';
       const params = { id: this.id };
 
-      const loading = this.$loading({ lock: true });
-      axios.get(url, { params }).then((res) => {
-        this.category = res.data.category;
-        this.area = res.data.area;
-        this.location = res.data.location;
-        this.contact = res.data.contact;
-        this.cost = res.data.cost;
+      ajaxPrompt(this, axios.get(url, { params }), (res) => {
+        this.category = res.category;
+        this.area = res.area;
+        this.location = res.location;
+        this.contact = res.contact;
+        this.cost = res.cost;
 
-        this.title = res.data.title;
-        this.text = res.data.text;
-        this.previousImg = res.data.img;
-
-        loading.close();
-      }).catch((e) => {
-        loading.close();
-        this.$message.error({
-          message: e.response.data.err, showClose: true
-        });
+        this.title = res.title;
+        this.text = res.text;
+        this.previousImg = res.img;
       });
     },
     methods: {
+      postAction(url, data) {
+        ajaxPrompt(this, axios.post(url, data), (res) => {
+          this.$message({
+            message: res.msg, showClose: true
+          });
+          this.$router.push({ name: 'userPage' });
+        });
+      },
       onSubmit() {
         const url = '/article/submit';
         const data = new FormData();
@@ -175,46 +171,12 @@
         data.append('text', this.text);
         data.append('image', this.file);
 
-        const loading = this.$loading({ lock: true });
-        axios.post(url, data).then((res) => {
-          this.$message({
-            message: res.data.msg, showClose: true
-          });
-          this.$router.push({ name: 'userPage' });
-
-          loading.close();
-        }).catch((e) => {
-          loading.close();
-          this.$message.error({
-            message: e.response.data.err, showClose: true
-          });
-        });
+        this.postAction(url, data);
       },
       onDelete() {
         const url = '/article/delete';
-        const data = new FormData();
-        data.append('id', this.id);
-
-        const loading = this.$loading({ lock: true });
-        axios.post(url, data).then((res) => {
-          this.$message({
-            message: res.data.msg, showClose: true
-          });
-          this.$router.push({ name: 'userPage' });
-
-          loading.close();
-        }).catch((e) => {
-          loading.close();
-          this.$message.error({
-            message: e.response.data.err, showClose: true
-          });
-        });
-      },
-      onSelectImage(file, fileList) {
-        if (fileList && fileList[0])
-          this.file = fileList[0].raw;
-        else
-          this.file = null;
+        const data = { id: this.id };
+        this.postAction(url, data);
       }
     }
   }

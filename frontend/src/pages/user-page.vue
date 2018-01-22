@@ -73,17 +73,8 @@
         </el-row>
       </div>
       <div v-else>
-        <el-row class="input-row">
-          <el-upload action="/placeholder"
-                     list-type="picture"
-                     :multiple="false"
-                     :on-change="onSelectImage"
-                     :auto-upload="false">
-            <el-tag>
-              上传头像
-              <i class="el-icon-plus"></i>
-            </el-tag>
-          </el-upload>
+        <el-row class="input-row" style="margin: 10px 20%" justify="center">
+          <upload-component text="上传头像" v-model="file" />
         </el-row>
         <el-row class="input-row">
           <el-button type="primary" style="width:80%" @click="onSignup">
@@ -100,22 +91,17 @@
 </template>
 
 <script>
-  function getCookies() {
-    var cookies = {};
-    var rawCookies = document.cookie.split(';');
-    for (var i = 0; i < rawCookies.length; i++) {
-      var pair = rawCookies[i].trim().split('=');
-      cookies[pair[0]] = pair[1];
-    }
-    return cookies;
-  }
-
   import axios from 'axios'
+  import ajaxPrompt from './helpers/ajax-helper'
+  import getCookies from './helpers/cookie-helper'
   import articleThinItemComponent from './components/article-thin-item-component'
+  import uploadComponent from './components/upload-component'
+
   export default {
     name: 'userPage',
     components: {
-      articleThinItemComponent
+      articleThinItemComponent,
+      uploadComponent
     },
     data() {
       var cookies = getCookies();
@@ -144,7 +130,7 @@
           this.isLogin = false;
           this.name = '';
           this.pass = '';
-          this.file = '';
+          this.file = null;
           return;
         }
 
@@ -154,91 +140,41 @@
 
         const url = '/article/user';
 
-        const loading = this.$loading({ lock: true });
-        axios.get(url).then((res) => {
+        ajaxPrompt(this, axios.get(url), (res) => {
           this.items = [];
-          for (const item of res.data) {
+          for (const item of res) {
             this.items.push({
               id: item._id,
               timestamp: new Date(item.timestamp).toLocaleString(),
               title: item.title
             });
           }
-
-          loading.close();
-        }).catch((e) => {
-          loading.close();
-          this.$message.error({
-            message: e.response.data.err, showClose: true
+        });
+      },
+      postAction(url, data) {
+        ajaxPrompt(this, axios.post(url, data), (res) => {
+          this.$message({
+            message: res.msg, showClose: true
           });
+          this.checkLogin();
         });
       },
       onLogin() {
         const url = '/user/login';
-        const data = new FormData();
-        data.append('name', this.name);
-        data.append('pass', this.pass);
-
-        const loading = this.$loading({ lock: true });
-        axios.post(url, data).then((res) => {
-          this.$message({
-            message: res.data.msg, showClose: true
-          });
-          this.checkLogin();
-
-          loading.close();
-        }).catch((e) => {
-          loading.close();
-          this.$message.error({
-            message: e.response.data.err, showClose: true
-          });
-        });
+        const data = { name: this.name, pass: this.pass };
+        this.postAction(url, data);
       },
       onSignup() {
         const url = '/user/signup';
         const data = new FormData();
         data.append('name', this.name);
         data.append('pass', this.pass);
-        data.append('image', this.file);
-
-        const loading = this.$loading({ lock: true });
-        axios.post(url, data).then((res) => {
-          this.$message({
-            message: res.data.msg, showClose: true
-          });
-          this.checkLogin();
-
-          loading.close();
-        }).catch((e) => {
-          loading.close();
-          this.$message.error({
-            message: e.response.data.err, showClose: true
-          });
-        });
+        data.append('avatar', this.file);
+        this.postAction(url, data);
       },
       onLogout() {
         const url = '/user/logout';
-
-        const loading = this.$loading({ lock: true });
-        axios.post(url).then((res) => {
-          this.$message({
-            message: res.data.msg, showClose: true
-          });
-          this.checkLogin();
-
-          loading.close();
-        }).catch((e) => {
-          loading.close();
-          this.$message.error({
-            message: e.response.data.err, showClose: true
-          });
-        });
-      },
-      onSelectImage(file, fileList) {
-        if (fileList && fileList[0])
-          this.file = fileList[0].raw;
-        else
-          this.file = null;
+        this.postAction(url, null);
       },
       onRemoveItem() {
         this.checkLogin();
